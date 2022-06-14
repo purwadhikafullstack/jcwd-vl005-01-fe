@@ -1,17 +1,17 @@
 import { Add, Remove } from "@mui/icons-material";
 import styled from "styled-components";
-import Announcement from "../components/Announcement";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import Newsletter from "../components/Newsletter";
-import { mobile } from "../responsive";
+import Announcement from "../../components/user/Announcement";
+import Footer from "../../components/user/Footer";
+import Navbar from "../../components/user/Navbar";
+import Newsletter from "../../components/user/Newsletter";
+import { mobile } from "../../responsive";
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
   padding: 50px;
   display: flex;
-  ${mobile({ padding: "10px", flexDirection:"column" })}
+  ${mobile({ padding: "10px", flexDirection: "column" })}
 `;
 
 const ImgContainer = styled.div`
@@ -110,8 +110,8 @@ const Button = styled.button`
   cursor: pointer;
   font-weight: 500;
 
-  &:hover{
-      background-color: #f8f4f4;
+  &:hover {
+    background-color: #f8f4f4;
   }
 `;
 

@@ -1,9 +1,9 @@
 import { Add, Remove } from "@mui/icons-material";
 import styled from "styled-components";
-import Announcement from "../components/Announcement";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import { mobile } from "../responsive";
+import Announcement from "../../components/user/Announcement";
+import Footer from "../../components/user/Footer";
+import Navbar from "../../components/user/Navbar";
+import { mobile } from "../../responsive";
 
 const Container = styled.div``;
 
@@ -47,7 +47,6 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   ${mobile({ flexDirection: "column" })}
-
 `;
 
 const Info = styled.div`
