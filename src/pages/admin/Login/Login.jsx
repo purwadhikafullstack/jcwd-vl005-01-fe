@@ -1,14 +1,63 @@
-import { Link as LinkTo } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../../../redux/adminSlice";
+import Axios from "axios";
+import { toast } from "react-toastify";
+import { Link as LinkTo, useNavigate } from "react-router-dom";
 import {
   Button,
   Grid,
+  IconButton,
+  InputAdornment,
   Link,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const password = useRef("");
+  const user = useRef("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const showPassword = () => {
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
+
+  const onBtnLogin = () => {
+    const loginCredential = {
+      user: user.current.value,
+      password: password.current.value,
+    };
+
+    setLoading(true);
+
+    Axios.post(process.env.REACT_APP_API + "/auth/admin/login", loginCredential)
+      .then((respond) => {
+        toast.info("Login Success");
+        setLoading(false);
+        const token = respond.headers.authorization.split(" ")[1];
+        localStorage.setItem("token", token);
+        user.current.value = "";
+        password.current.value = "";
+
+        dispatch(login(respond.data));
+        navigate("/admin/home");
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error(error.response.data);
+      });
+  };
+
   return (
     <Grid
       container
@@ -37,16 +86,28 @@ const Login = () => {
           id="outlined-basic"
           label="Email"
           variant="outlined"
+          inputRef={user}
           type="email"
         />
         <TextField
-          id="outlined-basic"
           label="Password"
           variant="outlined"
-          type="password"
+          type={visible ? "text" : "password"}
+          inputRef={password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton color="primary" size="large" onClick={showPassword}>
+                  {visible ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
-        <Button variant="outlined">Login</Button>
+        <Button variant="outlined" onClick={onBtnLogin} disabled={loading}>
+          Login
+        </Button>
         <LinkTo to="/admin/forget-password" style={{ textAlign: "center" }}>
           <Link component="button" underline="hover" fontSize={"17px"}>
             Forgotten Password?

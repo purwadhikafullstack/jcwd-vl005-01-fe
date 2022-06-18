@@ -1,5 +1,6 @@
 // Import Router from react router dom
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -20,10 +21,18 @@ import NewProduct from "./pages/admin/newProduct/NewProduct";
 import AdminLogin from "./pages/admin/Login/Login";
 import ForgetPassword from "./pages/admin/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/admin/Reset Password/ResetPassword";
+import ProtectedRoutes from "./components/admin/ProtectedRoutes";
+
+// Others
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const global = useSelector((state) => state.admin);
+  console.log(global);
   return (
     <BrowserRouter>
+      <ToastContainer theme="colored" position="bottom-center" />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products/:category" element={<ProductList />} />
@@ -33,18 +42,20 @@ const App = () => {
         <Route path="/register" element={<Register />} />
 
         <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/home" element={<AdminHome />} />
         <Route path="/admin/forget-password" element={<ForgetPassword />} />
         <Route
           path="/admin/reset-password/:token"
           element={<ResetPassword />}
         />
-        <Route path="/admin/users" element={<UserList />} />
-        <Route path="/admin/user/:userId" element={<User />} />
-        <Route path="/admin/newUser" element={<NewUser />} />
-        <Route path="/admin/products" element={<AdminProductList />} />
-        <Route path="/admin/product/:productId" element={<AdminProduct />} />
-        <Route path="/admin/newproduct" element={<NewProduct />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/admin/home" element={<AdminHome />} />
+          <Route path="/admin/users" element={<UserList />} />
+          <Route path="/admin/user/:userId" element={<User />} />
+          <Route path="/admin/newUser" element={<NewUser />} />
+          <Route path="/admin/products" element={<AdminProductList />} />
+          <Route path="/admin/product/:productId" element={<AdminProduct />} />
+          <Route path="/admin/newproduct" element={<NewProduct />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
