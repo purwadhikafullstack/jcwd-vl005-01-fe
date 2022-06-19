@@ -1,6 +1,9 @@
-// Import Router from react router dom
+// Import Modules
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "./redux/adminSlice";
+import { useEffect } from "react";
+import Axios from "axios";
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -28,8 +31,21 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
+      headers: { authorization: token },
+    })
+      .then((respond) => {
+        dispatch(login(respond.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
   const global = useSelector((state) => state.admin);
-  console.log(global);
+  console.log("GLOBAL :", global);
   return (
     <BrowserRouter>
       <ToastContainer theme="colored" position="bottom-center" />

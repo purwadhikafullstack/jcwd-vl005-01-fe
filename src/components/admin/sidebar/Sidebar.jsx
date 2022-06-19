@@ -11,8 +11,11 @@ import {
   Settings,
   Dashboard,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/adminSlice";
+import { toast } from "react-toastify";
 
 const StyledLink = styled(Link)({
   textDecoration: "none",
@@ -20,6 +23,14 @@ const StyledLink = styled(Link)({
 });
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onBtnLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
+    navigate("/admin");
+    toast.info("Logout Success!");
+  };
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -70,7 +81,7 @@ const Sidebar = () => {
             <Settings className="sidebarIcon" />
             Settings
           </li>
-          <li className="sidebarListItem">
+          <li className="sidebarListItem" onClick={onBtnLogout}>
             <ExitToApp className="sidebarIcon" />
             Logout
           </li>

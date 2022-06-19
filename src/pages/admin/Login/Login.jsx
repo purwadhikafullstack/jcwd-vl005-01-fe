@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useRef, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { login } from "../../../redux/adminSlice";
 import Axios from "axios";
 import { toast } from "react-toastify";
@@ -24,6 +24,16 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Protect Login Page
+  // If user still logged in cannot go to login page
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/admin/home");
+    }
+  });
+
+  // View Password toggler
   const showPassword = () => {
     if (!visible) {
       setVisible(true);
