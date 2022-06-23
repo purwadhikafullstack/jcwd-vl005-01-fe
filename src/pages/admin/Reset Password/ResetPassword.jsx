@@ -30,7 +30,7 @@ const ResetPassword = () => {
     )
       .then((respond) => {
         setValidToken(true);
-        adminId = respond.data.adminId.toString();
+        adminId = respond.data.adminId;
       })
       .catch((error) => {
         setValidToken(false);

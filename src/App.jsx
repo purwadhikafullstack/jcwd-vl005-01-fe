@@ -25,6 +25,8 @@ import AdminLogin from "./pages/admin/Login/Login";
 import ForgetPassword from "./pages/admin/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/admin/Reset Password/ResetPassword";
 import ProtectedRoutes from "./components/admin/ProtectedRoutes";
+import AdminRegister from "./pages/admin/Register/Register";
+import VerifyAccount from "./pages/admin/verifyAccount/VerifyAccount";
 
 // Others
 import { ToastContainer } from "react-toastify";
@@ -58,6 +60,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
 
         <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route
+          path="/admin/verify-account/:token"
+          element={<VerifyAccount />}
+        />
         <Route path="/admin/forget-password" element={<ForgetPassword />} />
         <Route
           path="/admin/reset-password/:token"

@@ -6,17 +6,20 @@ const adminSlice = createSlice({
     admin_id: "",
     username: "",
     email: "",
+    status: "",
   },
   reducers: {
     login: (state, action) => {
       state.admin_id = action.payload.admin_id;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.status = action.payload.status;
     },
     logout: (state) => {
       state.admin_id = "";
       state.username = "";
       state.email = "";
+      state.status = "";
     },
   },
 });
