@@ -1,33 +1,52 @@
 import "./userList.css";
 import { DataGrid } from "@material-ui/data-grid";
+import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutline } from "@mui/icons-material";
 import { userRows } from "../../../dummyData";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Axios from "axios";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
+import { getUsers } from "../../../redux/adminManageUser";
 
 export default function UserList() {
-  const [data, setData] = useState(userRows);
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.getuser.users);
+  // console.log("USERDATA :", userData);
+  // const [data, setData] = useState(userRows);
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
+      headers: { authorization: token },
+    })
+      .then((respond) => {
+        dispatch(getUsers(respond.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dispatch]);
+
+  // const handleDelete = (id) => {
+  //   setData(data.filter((item) => item.id !== id));
+  // };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "user_id", headerName: "ID", width: 150 },
     {
-      field: "user",
+      field: "username",
       headerName: "User",
       width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
-            {params.row.username}
-          </div>
-        );
-      },
+      // renderCell: (params) => {
+      //   return (
+      //     <div className="userListUser">
+      //       <img className="userListImg" src={params.row.avatar} alt="" />
+      //       {params.row.username}
+      //     </div>
+      //   );
+      // },
     },
     { field: "email", headerName: "Email", width: 200 },
     {
@@ -36,23 +55,18 @@ export default function UserList() {
       width: 120,
     },
     {
-      field: "transaction",
-      headerName: "Transaction Volume",
-      width: 160,
-    },
-    {
       field: "action",
       headerName: "Action",
       width: 150,
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/admin/user/" + params.row.id}>
+            <Link to={"/admin/user/" + params.row.user_id}>
               <button className="userListEdit">Edit</button>
             </Link>
             <DeleteOutline
               className="userListDelete"
-              onClick={() => handleDelete(params.row.id)}
+              // onClick={() => handleDelete(params.row.user_id)}
             />
           </>
         );
@@ -62,15 +76,17 @@ export default function UserList() {
 
   return (
     <div>
+      {/* <h1>Hello</h1> */}
       <Topbar />
       <div className="userlistWrapper">
         <Sidebar />
         <div className="userList">
           <DataGrid
-            rows={data}
-            disableSelectionOnClick
+            rows={userData}
+            // disableSelectionOnClick
             columns={columns}
-            pageSize={8}
+            getRowId={(row) => row.user_id}
+            // pageSize={10}
             checkboxSelection
           />
         </div>
