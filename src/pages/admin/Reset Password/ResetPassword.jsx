@@ -125,19 +125,6 @@ const ResetPassword = () => {
             margin="dense"
             type={visible ? "text" : "password"}
             inputRef={confirmPasswordRef}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    color="primary"
-                    size="large"
-                    onClick={showPassword}
-                  >
-                    {visible ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
           />
 
           <Button

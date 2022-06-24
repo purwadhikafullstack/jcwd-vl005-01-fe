@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -19,6 +20,8 @@ const Register = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const confirm_passwordRef = useRef("");
+  const navigate = useNavigate();
+
   const showPassword = () => {
     if (!visible) {
       setVisible(true);
@@ -46,6 +49,7 @@ const Register = () => {
         emailRef.current.value = "";
         passwordRef.current.value = "";
         confirm_passwordRef.current.value = "";
+        navigate("/admin");
       })
       .catch((error) => {
         setLoading(false);

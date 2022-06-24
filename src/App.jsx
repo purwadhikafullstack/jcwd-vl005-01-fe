@@ -1,5 +1,5 @@
 // Import Modules
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
 import { useEffect } from "react";
@@ -22,7 +22,7 @@ import AdminProductList from "./pages/admin/productList/ProductList";
 import AdminProduct from "./pages/admin/product/Product";
 import NewProduct from "./pages/admin/newProduct/NewProduct";
 import AdminLogin from "./pages/admin/Login/Login";
-import ForgetPassword from "./pages/admin/Forget Password/ForgetPassword";
+import AdminForgetPassword from "./pages/admin/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/admin/Reset Password/ResetPassword";
 import ProtectedRoutes from "./components/admin/ProtectedRoutes";
 import AdminRegister from "./pages/admin/Register/Register";
@@ -46,8 +46,7 @@ const App = () => {
         console.log(error);
       });
   });
-  const global = useSelector((state) => state.admin);
-  console.log("GLOBAL :", global);
+  const { username } = useSelector((state) => state.admin);
   return (
     <BrowserRouter>
       <ToastContainer theme="colored" position="bottom-center" />
@@ -59,13 +58,24 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route
+          path="/admin"
+          element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
+        />
+        <Route
+          path="/admin/register"
+          element={username ? <Navigate to="/admin/home" /> : <AdminRegister />}
+        />
         <Route
           path="/admin/verify-account/:token"
           element={<VerifyAccount />}
         />
-        <Route path="/admin/forget-password" element={<ForgetPassword />} />
+        <Route
+          path="/admin/forget-password"
+          element={
+            username ? <Navigate to="/admin/home" /> : <AdminForgetPassword />
+          }
+        />
         <Route
           path="/admin/reset-password/:token"
           element={<ResetPassword />}
