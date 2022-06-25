@@ -1,10 +1,9 @@
 import "./userList.css";
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteOutline } from "@mui/icons-material";
-import { userRows } from "../../../dummyData";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Axios from "axios";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
@@ -13,8 +12,6 @@ import { getUsers } from "../../../redux/adminManageUser";
 export default function UserList() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.getuser.users);
-  // console.log("USERDATA :", userData);
-  // const [data, setData] = useState(userRows);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -76,17 +73,17 @@ export default function UserList() {
 
   return (
     <div>
-      {/* <h1>Hello</h1> */}
       <Topbar />
       <div className="userlistWrapper">
         <Sidebar />
         <div className="userList">
           <DataGrid
             rows={userData}
-            // disableSelectionOnClick
+            disableSelectionOnClick
             columns={columns}
             getRowId={(row) => row.user_id}
-            // pageSize={10}
+            pageSize={5}
+            rowsPerPageOptions={[5, 10, 20]}
             checkboxSelection
           />
         </div>
