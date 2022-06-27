@@ -1,5 +1,10 @@
 import styled from "styled-components";
 import { mobile } from "../../responsive";
+import React, { useRef, useState } from 'react'
+import { useDispatch } from "react-redux";
+import Axios from 'axios'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   width: 100vw;
@@ -55,22 +60,64 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const usern = useRef("")
+  const email = useRef("")
+  const passw = useRef("")
+  const cpass = useRef("")
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onButtonRegis = (e) => {
+    e.preventDefault()
+
+    const newUser = {
+      username : usern.current.value,
+      email : email.current.value,
+      password : passw.current.value,
+      confirm_password : cpass.current.value
+    }
+    setLoading(true)
+    Axios.post(process.env.REACT_APP_API+'/users/regis', newUser)
+    .then((res) =>  {
+      console.log("res : ", res.data)
+      setLoading(false)
+      // reset state
+      // usern.current.value = ""
+      // email.current.value = ""
+      // passw.current.value = ""
+      // cpass.current.value = ""
+      
+      toast.success("Registration Successfull")
+
+      navigate('/user/regisdone')
+
+    }) 
+    .catch((error) => {
+      toast.error(error.response.data)
+      console.log(error)
+      setLoading(false)
+    })
+  }
+
+  // protection
+  const token = localStorage.getItem('token')
+  if (token) return <Navigate to="/"/>
+
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+          <Input ref={usern} placeholder="username" />
+          <Input ref={email} placeholder="email" />
+          <Input ref={passw} placeholder="password" />
+          <Input ref={cpass} placeholder="confirm password" />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          <Button onClick={onButtonRegis}>CREATE</Button>
         </Form>
       </Wrapper>
     </Container>
