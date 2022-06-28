@@ -71,7 +71,7 @@ const Login = () => {
       <Stack
         direction="column"
         spacing={2}
-        height="360px"
+        height="310px"
         width="500px"
         bgcolor="white"
         sx={{ boxShadow: 3, px: "100px", py: "30px" }}
@@ -113,12 +113,6 @@ const Login = () => {
           <Link component="button" underline="hover" fontSize={"17px"}>
             Forgotten Password?
           </Link>
-        </LinkTo>
-        <LinkTo
-          to="/admin/register"
-          style={{ textAlign: "center", textDecoration: "none" }}
-        >
-          <Button variant="outlined">Create New Account</Button>
         </LinkTo>
       </Stack>
     </Grid>

@@ -31,6 +31,7 @@ import VerifyAccount from "./pages/admin/verifyAccount/VerifyAccount";
 // Others
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ResendToken from "./pages/admin/ResendToken/ResendToken";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -63,10 +64,6 @@ const App = () => {
           element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
         />
         <Route
-          path="/admin/register"
-          element={username ? <Navigate to="/admin/home" /> : <AdminRegister />}
-        />
-        <Route
           path="/admin/verify-account/:token"
           element={<VerifyAccount />}
         />
@@ -81,6 +78,7 @@ const App = () => {
           element={<ResetPassword />}
         />
         <Route element={<ProtectedRoutes />}>
+          <Route path="/admin/register" element={<AdminRegister />} />
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/users" element={<UserList />} />
           <Route path="/admin/user/:userId" element={<User />} />
@@ -88,6 +86,7 @@ const App = () => {
           <Route path="/admin/products" element={<AdminProductList />} />
           <Route path="/admin/product/:productId" element={<AdminProduct />} />
           <Route path="/admin/newproduct" element={<NewProduct />} />
+          <Route path="/admin/resendtoken" element={<ResendToken />} />
         </Route>
       </Routes>
     </BrowserRouter>

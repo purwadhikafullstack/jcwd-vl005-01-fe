@@ -6,8 +6,11 @@ import {
   Language,
   Settings,
   Verified,
+  Add,
+  GppMaybe,
 } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function Topbar() {
   const adminData = useSelector((state) => state.admin);
@@ -19,7 +22,7 @@ export default function Topbar() {
         </div>
         <div className="topRight">
           <h5>Welcome, {adminData.username}</h5>
-          <span style={{ marginLeft: "30px" }}>
+          <span>
             {adminData.status === "verified" ? (
               <Tooltip title="Account Verified" placement="bottom-end">
                 <IconButton color="primary">
@@ -27,9 +30,24 @@ export default function Topbar() {
                 </IconButton>
               </Tooltip>
             ) : (
-              adminData.status
+              <Tooltip title="Account Unverified" placement="bottom-end">
+                <IconButton color="warning">
+                  <GppMaybe fontSize="medium" />
+                </IconButton>
+              </Tooltip>
             )}
           </span>
+          <Link to="/admin/register" style={{ textDecoration: "none" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Add />}
+              sx={{ textTransform: "capitalize" }}
+            >
+              Create New Account
+            </Button>
+          </Link>
+
           <div className="topbarIconContainer">
             <NotificationsNone />
             <span className="topIconBadge">2</span>

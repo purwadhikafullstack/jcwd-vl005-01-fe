@@ -49,7 +49,7 @@ const Register = () => {
         emailRef.current.value = "";
         passwordRef.current.value = "";
         confirm_passwordRef.current.value = "";
-        navigate("/admin");
+        navigate("/admin/home");
       })
       .catch((error) => {
         setLoading(false);

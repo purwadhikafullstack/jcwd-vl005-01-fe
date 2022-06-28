@@ -134,7 +134,7 @@ export default function UserList() {
               }}
               onClick={() => onBtnDeactivate(params.row.user_id)}
             >
-              Deactivate
+              {params.row.status === "active" ? "Deactivate" : "Activate"}
             </Button>
             {/* <DeleteOutline
               className="userListDelete"
