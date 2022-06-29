@@ -16,6 +16,7 @@ export default function UserList() {
   const userData = useSelector((state) => state.getuser.users);
   const [open, setOpen] = useState(false);
   const [id, SetId] = useState(null);
+  const [status, setStatus] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,9 +35,10 @@ export default function UserList() {
   //   setData(data.filter((item) => item.id !== id));
   // };
 
-  const onBtnDeactivate = (user_id) => {
+  const onBtnDeactivate = (user_id, user_status) => {
     setOpen(true);
     SetId(user_id);
+    setStatus(user_status);
   };
 
   const onConfirmDeactivate = (id) => {
@@ -50,8 +52,31 @@ export default function UserList() {
         Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
           headers: { authorization: token },
         })
-          .then((respond) => {
-            dispatch(getUsers(respond.data));
+          .then((respond2) => {
+            dispatch(getUsers(respond2.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        toast.error(error.response.data);
+      });
+  };
+
+  const onConfirmActivate = (id) => {
+    const token = localStorage.getItem("token");
+    Axios.get(process.env.REACT_APP_API + "/admin/activate-user/" + id, {
+      headers: { authorization: token },
+    })
+      .then((respond) => {
+        toast.success(respond.data);
+        setOpen(false);
+        Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
+          headers: { authorization: token },
+        })
+          .then((respond2) => {
+            dispatch(getUsers(respond2.data));
           })
           .catch((error) => {
             console.log(error);
@@ -132,7 +157,9 @@ export default function UserList() {
                 height: 40,
                 textTransform: "capitalize",
               }}
-              onClick={() => onBtnDeactivate(params.row.user_id)}
+              onClick={() =>
+                onBtnDeactivate(params.row.user_id, params.row.status)
+              }
             >
               {params.row.status === "active" ? "Deactivate" : "Activate"}
             </Button>
@@ -165,8 +192,12 @@ export default function UserList() {
             open={open}
             onClose={(e) => setOpen(false)}
             onCancel={(e) => setOpen(false)}
-            onConfirm={() => onConfirmDeactivate(id)}
-            text="deactivate this user ?"
+            onConfirm={
+              status === "active"
+                ? () => onConfirmDeactivate(id)
+                : () => onConfirmActivate(id)
+            }
+            text="Perform this action ?"
           />
         </div>
       </div>
