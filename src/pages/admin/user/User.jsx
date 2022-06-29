@@ -1,4 +1,8 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserById } from "../../../redux/adminManageUser";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   PermIdentity,
@@ -11,19 +15,22 @@ import {
 import "./user.css";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { userRows } from "../../../dummyData";
+import { Box, Stack, Typography } from "@mui/material";
 
 export default function User() {
+  const user = useSelector((state) => state.getuser.user);
+  const userObj = Object.assign({}, user[0]);
+  console.log("UserObj :", userObj);
   const dispatch = useDispatch();
+  const params = useParams();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
+    Axios.get(process.env.REACT_APP_API + "/admin/getuser/" + params.userId, {
       headers: { authorization: token },
     })
       .then((respond) => {
-        dispatch(getUsers(respond.data));
+        dispatch(getUserById(respond.data));
       })
       .catch((error) => {
         console.log(error);
@@ -32,15 +39,15 @@ export default function User() {
 
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
+      field: "tcode",
+      headerName: "Trx Code",
       width: 150,
       headerAlign: "center",
       align: "center",
     },
     {
-      field: "username",
-      headerName: "User",
+      field: "name",
+      headerName: "Product",
       width: 200,
       headerAlign: "center",
       align: "center",
@@ -54,57 +61,25 @@ export default function User() {
       // },
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "qty",
+      headerName: "Qty",
       width: 200,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 120,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "status",
       headerName: "Status",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "action",
-      headerName: "Action",
       width: 200,
       headerAlign: "center",
       align: "center",
-      renderCell: (params) => {
-        return (
-          <>
-            <Button
-              variant="outlined"
-              sx={{
-                width: "60px",
-                height: "40px",
-                textTransform: "capitalize",
-                marginRight: "10px",
-              }}
-            >
-              View
-            </Button>
-            <Button
-              variant="outlined"
-              color={"error"}
-              sx={{
-                width: 200,
-                height: 40,
-                textTransform: "capitalize",
-              }}
-            >
-              Deactivate
-            </Button>
-            {/* <DeleteOutline
-              className="userListDelete"
-              onClick={() => handleDelete(params.row.user_id)}
-            /> */}
-          </>
-        );
-      },
     },
   ];
   return (
@@ -122,15 +97,16 @@ export default function User() {
                 <span className="userShowTitle">Account Details</span>
                 <div className="userShowInfo">
                   <PermIdentity className="userShowIcon" />
-                  <span className="userShowInfoTitle">Username</span>
+                  <span className="userShowInfoTitle">{userObj.username}</span>
                 </div>
                 <div className="userShowInfo">
                   <Email className="userShowIcon" />
-                  <span className="userShowInfoTitle">Email</span>
+                  <span className="userShowInfoTitle">{userObj.email}</span>
                 </div>
                 <div className="userShowInfo">
                   <Key className="userShowIcon" />
-                  <span className="userShowInfoTitle">Status</span>
+                  <span className="userShowInfoTitle"></span>
+                  {userObj.user_id}
                 </div>
               </Box>
               <Box flex={3} sx={{ boxShadow: 2, padding: "10px" }}>
@@ -153,10 +129,10 @@ export default function User() {
               User Transaction
             </Typography>
             <DataGrid
-              rows={userRows}
+              rows={user}
               disableSelectionOnClick
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row.tcode}
               pageSize={5}
               rowsPerPageOptions={[5, 10, 20]}
               checkboxSelection
