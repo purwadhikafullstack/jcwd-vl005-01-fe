@@ -1,18 +1,7 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import SimpleForm from "../../../components/admin/simpleForm/SimpleForm";
 
 const ForgetPassword = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/admin/home");
-    }
-  });
-
   return (
     <Grid
       container

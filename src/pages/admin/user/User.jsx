@@ -1,131 +1,143 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserById } from "../../../redux/adminManageUser";
+import { DataGrid } from "@mui/x-data-grid";
 import {
-  CalendarToday,
-  LocationSearching,
-  MailOutline,
   PermIdentity,
-  PhoneAndroid,
-  Publish,
+  Home,
+  Email,
+  Key,
+  LocationCity,
+  Signpost,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
 import "./user.css";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
+import { Box, Stack, Typography } from "@mui/material";
 
 export default function User() {
+  const user = useSelector((state) => state.getuser.user);
+  const userObj = Object.assign({}, user[0]);
+  console.log("UserObj :", userObj);
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    Axios.get(process.env.REACT_APP_API + "/admin/getuser/" + params.userId, {
+      headers: { authorization: token },
+    })
+      .then((respond) => {
+        dispatch(getUserById(respond.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dispatch]);
+
+  const columns = [
+    {
+      field: "tcode",
+      headerName: "Trx Code",
+      width: 150,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "name",
+      headerName: "Product",
+      width: 200,
+      headerAlign: "center",
+      align: "center",
+      // renderCell: (params) => {
+      //   return (
+      //     <div className="userListUser">
+      //       <img className="userListImg" src={params.row.avatar} alt="" />
+      //       {params.row.username}
+      //     </div>
+      //   );
+      // },
+    },
+    {
+      field: "qty",
+      headerName: "Qty",
+      width: 200,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
   return (
     <div>
       <Topbar />
       <div className="userWrapper">
         <Sidebar />
         <div className="user">
-          <div className="userTitleContainer">
-            <h1 className="userTitle">Edit User</h1>
-            <Link to="/admin/newUser">
-              <button className="userAddButton">Create</button>
-            </Link>
-          </div>
-          <div className="userContainer">
-            <div className="userShow">
-              <div className="userShowTop">
-                <img
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                  className="userShowImg"
-                />
-                <div className="userShowTopTitle">
-                  <span className="userShowUsername">Anna Becker</span>
-                  <span className="userShowUserTitle">Software Engineer</span>
-                </div>
-              </div>
-              <div className="userShowBottom">
+          <Box height="500px">
+            <Typography variant="h4" fontWeight="bold" marginBottom="30px">
+              User Info
+            </Typography>
+            <Stack direction="row">
+              <Box flex={1} sx={{ boxShadow: 2, padding: "10px" }}>
                 <span className="userShowTitle">Account Details</span>
                 <div className="userShowInfo">
                   <PermIdentity className="userShowIcon" />
-                  <span className="userShowInfoTitle">annabeck99</span>
+                  <span className="userShowInfoTitle">{userObj.username}</span>
                 </div>
                 <div className="userShowInfo">
-                  <CalendarToday className="userShowIcon" />
-                  <span className="userShowInfoTitle">10.12.1999</span>
+                  <Email className="userShowIcon" />
+                  <span className="userShowInfoTitle">{userObj.email}</span>
                 </div>
+                <div className="userShowInfo">
+                  <Key className="userShowIcon" />
+                  <span className="userShowInfoTitle"></span>
+                  {userObj.user_id}
+                </div>
+              </Box>
+              <Box flex={3} sx={{ boxShadow: 2, padding: "10px" }}>
                 <span className="userShowTitle">Contact Details</span>
                 <div className="userShowInfo">
-                  <PhoneAndroid className="userShowIcon" />
-                  <span className="userShowInfoTitle">+1 123 456 67</span>
+                  <Home className="userShowIcon" />
+                  <span className="userShowInfoTitle">Address</span>
                 </div>
                 <div className="userShowInfo">
-                  <MailOutline className="userShowIcon" />
-                  <span className="userShowInfoTitle">
-                    annabeck99@gmail.com
-                  </span>
+                  <LocationCity className="userShowIcon" />
+                  <span className="userShowInfoTitle">Province</span>
                 </div>
                 <div className="userShowInfo">
-                  <LocationSearching className="userShowIcon" />
-                  <span className="userShowInfoTitle">New York | USA</span>
+                  <Signpost className="userShowIcon" />
+                  <span className="userShowInfoTitle">Postal Code</span>
                 </div>
-              </div>
-            </div>
-            <div className="userUpdate">
-              <span className="userUpdateTitle">Edit</span>
-              <form className="userUpdateForm">
-                <div className="userUpdateLeft">
-                  <div className="userUpdateItem">
-                    <label>Username</label>
-                    <input
-                      type="text"
-                      placeholder="annabeck99"
-                      className="userUpdateInput"
-                    />
-                  </div>
-                  <div className="userUpdateItem">
-                    <label>Full Name</label>
-                    <input
-                      type="text"
-                      placeholder="Anna Becker"
-                      className="userUpdateInput"
-                    />
-                  </div>
-                  <div className="userUpdateItem">
-                    <label>Email</label>
-                    <input
-                      type="text"
-                      placeholder="annabeck99@gmail.com"
-                      className="userUpdateInput"
-                    />
-                  </div>
-                  <div className="userUpdateItem">
-                    <label>Phone</label>
-                    <input
-                      type="text"
-                      placeholder="+1 123 456 67"
-                      className="userUpdateInput"
-                    />
-                  </div>
-                  <div className="userUpdateItem">
-                    <label>Address</label>
-                    <input
-                      type="text"
-                      placeholder="New York | USA"
-                      className="userUpdateInput"
-                    />
-                  </div>
-                </div>
-                <div className="userUpdateRight">
-                  <div className="userUpdateUpload">
-                    <img
-                      className="userUpdateImg"
-                      src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                      alt=""
-                    />
-                    <label htmlFor="file">
-                      <Publish className="userUpdateIcon" />
-                    </label>
-                    <input type="file" id="file" style={{ display: "none" }} />
-                  </div>
-                  <button className="userUpdateButton">Update</button>
-                </div>
-              </form>
-            </div>
-          </div>
+              </Box>
+            </Stack>
+            <Typography variant="h4" fontWeight="bold" my="30px">
+              User Transaction
+            </Typography>
+            <DataGrid
+              rows={user}
+              disableSelectionOnClick
+              columns={columns}
+              getRowId={(row) => row.tcode}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 20]}
+              checkboxSelection
+            />
+          </Box>
         </div>
       </div>
     </div>

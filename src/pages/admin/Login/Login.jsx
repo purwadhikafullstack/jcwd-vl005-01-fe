@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/adminSlice";
 import Axios from "axios";
@@ -23,15 +23,6 @@ const Login = () => {
   const user = useRef("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // Protect Login Page
-  // If user still logged in cannot go to login page
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/admin/home");
-    }
-  });
 
   // View Password toggler
   const showPassword = () => {
@@ -79,8 +70,8 @@ const Login = () => {
     >
       <Stack
         direction="column"
-        spacing={1.5}
-        height="300px"
+        spacing={2}
+        height="310px"
         width="500px"
         bgcolor="white"
         sx={{ boxShadow: 3, px: "100px", py: "30px" }}
@@ -94,7 +85,7 @@ const Login = () => {
 
         <TextField
           id="outlined-basic"
-          label="Email"
+          label="Email/Username"
           variant="outlined"
           inputRef={user}
           type="email"
