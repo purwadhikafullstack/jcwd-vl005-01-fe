@@ -19,7 +19,7 @@ export default function UserList() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
       headers: { authorization: token },
     })
@@ -42,7 +42,7 @@ export default function UserList() {
   };
 
   const onConfirmDeactivate = (id) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     Axios.get(process.env.REACT_APP_API + "/admin/deactivate-user/" + id, {
       headers: { authorization: token },
     })
@@ -65,7 +65,7 @@ export default function UserList() {
   };
 
   const onConfirmActivate = (id) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     Axios.get(process.env.REACT_APP_API + "/admin/activate-user/" + id, {
       headers: { authorization: token },
     })

@@ -25,7 +25,7 @@ export default function User() {
   const params = useParams();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     Axios.get(process.env.REACT_APP_API + "/admin/getuser/" + params.userId, {
       headers: { authorization: token },
     })

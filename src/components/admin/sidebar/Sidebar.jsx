@@ -26,7 +26,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onBtnLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     dispatch(logout());
     navigate("/admin");
     toast.info("Logout Success!");
