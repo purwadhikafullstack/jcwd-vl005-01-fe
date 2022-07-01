@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserById } from "../../../redux/adminManageUser";
+import { fetchUserById } from "../../../redux/adminApiCalls";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   PermIdentity,
@@ -20,21 +19,11 @@ import { Box, Stack, Typography } from "@mui/material";
 export default function User() {
   const user = useSelector((state) => state.getuser.user);
   const userObj = Object.assign({}, user[0]);
-  console.log("UserObj :", userObj);
   const dispatch = useDispatch();
   const params = useParams();
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    Axios.get(process.env.REACT_APP_API + "/admin/getuser/" + params.userId, {
-      headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(getUserById(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchUserById(params.userId, dispatch);
   }, [dispatch]);
 
   const columns = [

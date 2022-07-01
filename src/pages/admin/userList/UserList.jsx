@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
-import { getUsers } from "../../../redux/adminManageUser";
 import { Button } from "@mui/material";
 import StyledModal from "../../../components/admin/StyledModal";
 import { toast } from "react-toastify";
+import { fetchUsers } from "../../../redux/adminApiCalls";
 
 export default function UserList() {
   const dispatch = useDispatch();
@@ -19,16 +19,7 @@ export default function UserList() {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
-      headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(getUsers(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchUsers(dispatch);
   }, [dispatch]);
 
   // const handleDelete = (id) => {
@@ -47,17 +38,9 @@ export default function UserList() {
       headers: { authorization: token },
     })
       .then((respond) => {
-        toast.success(respond.data);
         setOpen(false);
-        Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
-          headers: { authorization: token },
-        })
-          .then((respond2) => {
-            dispatch(getUsers(respond2.data));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        toast.success(respond.data);
+        fetchUsers(dispatch);
       })
       .catch((error) => {
         toast.error(error.response.data);
@@ -70,17 +53,9 @@ export default function UserList() {
       headers: { authorization: token },
     })
       .then((respond) => {
-        toast.success(respond.data);
         setOpen(false);
-        Axios.get(process.env.REACT_APP_API + "/admin/getusers", {
-          headers: { authorization: token },
-        })
-          .then((respond2) => {
-            dispatch(getUsers(respond2.data));
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        toast.success(respond.data);
+        fetchUsers(dispatch);
       })
       .catch((error) => {
         toast.error(error.response.data);

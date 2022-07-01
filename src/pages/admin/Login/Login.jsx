@@ -88,7 +88,7 @@ const Login = () => {
     >
       <Stack
         direction="column"
-        spacing={1}
+        spacing={2}
         height="310px"
         width="500px"
         bgcolor="white"
