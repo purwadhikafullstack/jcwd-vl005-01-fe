@@ -26,7 +26,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onBtnLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
     dispatch(logout());
     navigate("/admin");
     toast.info("Logout Success!");
@@ -54,10 +54,12 @@ const Sidebar = () => {
                 Users
               </li>
             </StyledLink>
-            <li className="sidebarListItem">
-              <AttachMoney className="sidebarIcon" />
-              Transactions
-            </li>
+            <StyledLink to="/admin/transactions" className="link">
+              <li className="sidebarListItem">
+                <AttachMoney className="sidebarIcon" />
+                Transactions
+              </li>
+            </StyledLink>
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
               Reports

@@ -1,0 +1,7 @@
+.transactionlistWrapper {
+  display: flex;
+}
+.transactionList {
+  flex: 4;
+  height: 100vh;
+}

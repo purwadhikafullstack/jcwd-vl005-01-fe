@@ -13,16 +13,22 @@ import {
   Stack,
   TextField,
   Typography,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [check, setCheck] = useState(false);
   const password = useRef("");
   const user = useRef("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // console.log("CHECK :", check);
 
   // View Password toggler
   const showPassword = () => {
@@ -32,6 +38,14 @@ const Login = () => {
       setVisible(false);
     }
   };
+
+  // const onBtnCheck = () => {
+  //   if (check === false) {
+  //     setCheck(true);
+  //   } else {
+  //     setCheck(false);
+  //   }
+  // };
 
   const onBtnLogin = () => {
     const loginCredential = {
@@ -46,7 +60,11 @@ const Login = () => {
         toast.info("Login Success");
         setLoading(false);
         const token = respond.headers.authorization.split(" ")[1];
-        localStorage.setItem("token", token);
+        localStorage.setItem("adminToken", token);
+        // if (check === true) {
+        //   const token = respond.headers.authorization.split(" ")[1];
+        //   localStorage.setItem("adminToken", token);
+        // }
         user.current.value = "";
         password.current.value = "";
 
@@ -105,6 +123,12 @@ const Login = () => {
             ),
           }}
         />
+        {/* <FormGroup color="primary">
+          <FormControlLabel
+            control={<Checkbox onClick={onBtnCheck} />}
+            label="Keep Me Login"
+          />
+        </FormGroup> */}
 
         <Button variant="outlined" onClick={onBtnLogin} disabled={loading}>
           Login

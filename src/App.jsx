@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
 import { useEffect } from "react";
-import Axios from "axios";
+import jwt_decode from "jwt-decode";
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -27,6 +27,7 @@ import ResetPassword from "./pages/admin/Reset Password/ResetPassword";
 import ProtectedRoutes from "./components/admin/ProtectedRoutes";
 import AdminRegister from "./pages/admin/Register/Register";
 import VerifyAccount from "./pages/admin/verifyAccount/VerifyAccount";
+import TransactionList from "./pages/admin/transactionList/TransactionList";
 
 // Others
 import { ToastContainer } from "react-toastify";
@@ -36,16 +37,11 @@ import ResendToken from "./pages/admin/ResendToken/ResendToken";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
-      headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(login(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const token = localStorage.getItem("adminToken");
+    if (token) {
+      const user = jwt_decode(token);
+      dispatch(login(user));
+    }
   });
   const { username } = useSelector((state) => state.admin);
   return (
@@ -87,6 +83,7 @@ const App = () => {
           <Route path="/admin/product/:productId" element={<AdminProduct />} />
           <Route path="/admin/newproduct" element={<NewProduct />} />
           <Route path="/admin/resendtoken" element={<ResendToken />} />
+          <Route path="/admin/transactions" element={<TransactionList />} />
         </Route>
       </Routes>
     </BrowserRouter>
