@@ -27,6 +27,7 @@ import ResetPassword from "./pages/admin/Reset Password/ResetPassword";
 import ProtectedRoutes from "./components/admin/ProtectedRoutes";
 import AdminRegister from "./pages/admin/Register/Register";
 import VerifyAccount from "./pages/admin/verifyAccount/VerifyAccount";
+import TransactionList from "./pages/admin/transactionList/TransactionList";
 
 // Others
 import { ToastContainer } from "react-toastify";
@@ -82,6 +83,7 @@ const App = () => {
           <Route path="/admin/product/:productId" element={<AdminProduct />} />
           <Route path="/admin/newproduct" element={<NewProduct />} />
           <Route path="/admin/resendtoken" element={<ResendToken />} />
+          <Route path="/admin/transactions" element={<TransactionList />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -54,10 +54,12 @@ const Sidebar = () => {
                 Users
               </li>
             </StyledLink>
-            <li className="sidebarListItem">
-              <AttachMoney className="sidebarIcon" />
-              Transactions
-            </li>
+            <StyledLink to="/admin/transactions" className="link">
+              <li className="sidebarListItem">
+                <AttachMoney className="sidebarIcon" />
+                Transactions
+              </li>
+            </StyledLink>
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
               Reports

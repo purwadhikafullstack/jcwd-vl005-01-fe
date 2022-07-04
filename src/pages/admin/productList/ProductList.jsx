@@ -1,5 +1,6 @@
 import "./productList.css";
-import { DataGrid } from "@material-ui/data-grid";
+// import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { DeleteOutline } from "@mui/icons-material";
 import { productRows } from "../../../dummyData";
 import { Link } from "react-router-dom";
@@ -71,6 +72,7 @@ export default function ProductList() {
             disableSelectionOnClick
             columns={columns}
             pageSize={8}
+            rowsPerPageOptions={[8, 16, 24]}
             checkboxSelection
           />
         </div>
