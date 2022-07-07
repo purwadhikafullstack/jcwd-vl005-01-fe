@@ -5,6 +5,7 @@
 .user {
   flex: 4;
   padding: 20px;
+  height: 100vh;
 }
 
 .userShowTitle {
