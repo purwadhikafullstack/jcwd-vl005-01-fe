@@ -60,10 +60,12 @@ const Sidebar = () => {
                 Transactions
               </li>
             </StyledLink>
-            <li className="sidebarListItem">
-              <BarChart className="sidebarIcon" />
-              Reports
-            </li>
+            <StyledLink to="/admin/reports" className="link">
+              <li className="sidebarListItem">
+                <BarChart className="sidebarIcon" />
+                Reports
+              </li>
+            </StyledLink>
             <li className="sidebarListItem">
               <MailOutline className="sidebarIcon" />
               Mail

@@ -33,6 +33,7 @@ import TransactionList from "./pages/admin/transactionList/TransactionList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
+import Reports from "./pages/admin/Reports/Reports";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ const App = () => {
           <Route path="/admin/newproduct" element={<NewProduct />} />
           <Route path="/admin/resendtoken" element={<ResendToken />} />
           <Route path="/admin/transactions" element={<TransactionList />} />
+          <Route path="/admin/reports" element={<Reports />} />
         </Route>
       </Routes>
     </BrowserRouter>

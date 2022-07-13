@@ -1,0 +1,8 @@
+.reportsWrapper {
+  display: flex;
+}
+.reports {
+  flex: 4;
+  height: 100vh;
+  padding: 50px;
+}

@@ -77,7 +77,7 @@ export default function User() {
       <div className="userWrapper">
         <Sidebar />
         <div className="user">
-          <Box height="500px">
+          <Box height="40%">
             <Typography variant="h4" fontWeight="bold" marginBottom="30px">
               User Info
             </Typography>
