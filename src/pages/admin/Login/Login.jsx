@@ -55,9 +55,10 @@ const Login = () => {
 
     setLoading(true);
 
-    Axios.post(process.env.REACT_APP_API + "/auth/admin/login", loginCredential)
+    Axios.post("http://localhost:4100/api/auth/admin/login", loginCredential)
       .then((respond) => {
         toast.info("Login Success");
+        console.log(respond)
         setLoading(false);
         const token = respond.headers.authorization.split(" ")[1];
         localStorage.setItem("adminToken", token);
