@@ -22,7 +22,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const passwordRef = useRef("");
   const confirmPasswordRef = useRef("");
-  let adminId;
+  let admin_id;
 
   useEffect(() => {
     Axios.get(
@@ -30,7 +30,7 @@ const ResetPassword = () => {
     )
       .then((respond) => {
         setValidToken(true);
-        adminId = respond.data.adminId.toString();
+        admin_id = respond.data.admin_id;
       })
       .catch((error) => {
         setValidToken(false);
@@ -42,7 +42,7 @@ const ResetPassword = () => {
     const newPassword = {
       password: passwordRef.current.value,
       confirm_password: confirmPasswordRef.current.value,
-      adminId: adminId,
+      admin_id: admin_id,
     };
 
     Axios.patch(
@@ -52,7 +52,7 @@ const ResetPassword = () => {
       .then((respond) => {
         passwordRef.current.value = "";
         confirmPasswordRef.current.value = "";
-        adminId = "";
+        admin_id = "";
         toast.success(respond.data);
         setLoading(false);
         navigate("/admin");
@@ -125,19 +125,6 @@ const ResetPassword = () => {
             margin="dense"
             type={visible ? "text" : "password"}
             inputRef={confirmPasswordRef}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    color="primary"
-                    size="large"
-                    onClick={showPassword}
-                  >
-                    {visible ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
           />
 
           <Button

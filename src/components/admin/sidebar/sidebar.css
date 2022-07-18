@@ -37,7 +37,7 @@
 }
 
 .sidebarListItem:hover {
-  background-color: rgb(240, 240, 255);
+  background-color: #f0f0ff;
 }
 
 .sidebarListItem:active {

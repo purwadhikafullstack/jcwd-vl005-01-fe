@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../../redux/adminSlice";
 import Axios from "axios";
@@ -13,25 +13,22 @@ import {
   Stack,
   TextField,
   Typography,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [check, setCheck] = useState(false);
   const password = useRef("");
   const user = useRef("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Protect Login Page
-  // If user still logged in cannot go to login page
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/admin/home");
-    }
-  });
+  // console.log("CHECK :", check);
 
   // View Password toggler
   const showPassword = () => {
@@ -41,6 +38,14 @@ const Login = () => {
       setVisible(false);
     }
   };
+
+  // const onBtnCheck = () => {
+  //   if (check === false) {
+  //     setCheck(true);
+  //   } else {
+  //     setCheck(false);
+  //   }
+  // };
 
   const onBtnLogin = () => {
     const loginCredential = {
@@ -56,7 +61,11 @@ const Login = () => {
         console.log(respond)
         setLoading(false);
         const token = respond.headers.authorization.split(" ")[1];
-        localStorage.setItem("token", token);
+        localStorage.setItem("adminToken", token);
+        // if (check === true) {
+        //   const token = respond.headers.authorization.split(" ")[1];
+        //   localStorage.setItem("adminToken", token);
+        // }
         user.current.value = "";
         password.current.value = "";
 
@@ -80,8 +89,8 @@ const Login = () => {
     >
       <Stack
         direction="column"
-        spacing={1.5}
-        height="300px"
+        spacing={2}
+        height="310px"
         width="500px"
         bgcolor="white"
         sx={{ boxShadow: 3, px: "100px", py: "30px" }}
@@ -95,7 +104,7 @@ const Login = () => {
 
         <TextField
           id="outlined-basic"
-          label="Email"
+          label="Email/Username"
           variant="outlined"
           inputRef={user}
           type="email"
@@ -115,6 +124,12 @@ const Login = () => {
             ),
           }}
         />
+        {/* <FormGroup color="primary">
+          <FormControlLabel
+            control={<Checkbox onClick={onBtnCheck} />}
+            label="Keep Me Login"
+          />
+        </FormGroup> */}
 
         <Button variant="outlined" onClick={onBtnLogin} disabled={loading}>
           Login
