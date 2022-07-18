@@ -11,7 +11,7 @@ import {
   Settings,
   Dashboard,
 } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { styled } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/adminSlice";
@@ -25,6 +25,7 @@ const StyledLink = styled(Link)({
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const onBtnLogout = () => {
     localStorage.removeItem("adminToken");
     dispatch(logout());
@@ -37,31 +38,66 @@ const Sidebar = () => {
         <div className="upperSidebar">
           <ul className="sidebarList">
             <StyledLink to="/admin/home" className="link">
-              <li className="sidebarListItem">
+              <li
+                className="sidebarListItem"
+                style={
+                  location.pathname === "/admin/home"
+                    ? { backgroundColor: "#cecef3", borderRadius: "10px" }
+                    : null
+                }
+              >
                 <Dashboard className="sidebarIcon" />
                 Dashboard
               </li>
             </StyledLink>
             <StyledLink to="/admin/products" className="link">
-              <li className="sidebarListItem">
+              <li
+                className="sidebarListItem"
+                style={
+                  location.pathname === "/admin/products"
+                    ? { backgroundColor: "#cecef3", borderRadius: "10px" }
+                    : null
+                }
+              >
                 <Storefront className="sidebarIcon" />
                 Products
               </li>
             </StyledLink>
             <StyledLink to="/admin/users" className="link">
-              <li className="sidebarListItem">
+              <li
+                className="sidebarListItem"
+                style={
+                  location.pathname === "/admin/users"
+                    ? { backgroundColor: "#cecef3", borderRadius: "10px" }
+                    : null
+                }
+              >
                 <PermIdentity className="sidebarIcon" />
                 Users
               </li>
             </StyledLink>
             <StyledLink to="/admin/transactions" className="link">
-              <li className="sidebarListItem">
+              <li
+                className="sidebarListItem"
+                style={
+                  location.pathname === "/admin/transactions"
+                    ? { backgroundColor: "#cecef3", borderRadius: "10px" }
+                    : null
+                }
+              >
                 <AttachMoney className="sidebarIcon" />
                 Transactions
               </li>
             </StyledLink>
             <StyledLink to="/admin/reports" className="link">
-              <li className="sidebarListItem">
+              <li
+                className="sidebarListItem"
+                style={
+                  location.pathname === "/admin/reports"
+                    ? { backgroundColor: "#cecef3", borderRadius: "10px" }
+                    : null
+                }
+              >
                 <BarChart className="sidebarIcon" />
                 Reports
               </li>

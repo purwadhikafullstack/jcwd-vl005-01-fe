@@ -4,11 +4,14 @@ import { getTransactions } from "./adminManageTransactions";
 import Axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API;
-const token = localStorage.getItem("adminToken");
+
+const getToken = () => {
+  return localStorage.getItem("adminToken");
+};
 
 export const fetchUsers = (dispatch) => {
   Axios.get(BASE_URL + "/admin/getusers", {
-    headers: { authorization: token },
+    headers: { authorization: getToken() },
   })
     .then((respond) => {
       dispatch(getUsers(respond.data));
@@ -20,7 +23,7 @@ export const fetchUsers = (dispatch) => {
 
 export const fetchUserById = (id, dispatch) => {
   Axios.get(BASE_URL + "/admin/getuser/" + id, {
-    headers: { authorization: token },
+    headers: { authorization: getToken() },
   })
     .then((respond) => {
       dispatch(getUserById(respond.data));
@@ -32,7 +35,7 @@ export const fetchUserById = (id, dispatch) => {
 
 export const fetchTransactions = (dispatch) => {
   Axios.get(BASE_URL + "/admin/transactions", {
-    headers: { authorization: token },
+    headers: { authorization: getToken() },
   })
     .then((respond) => {
       dispatch(getTransactions(respond.data));
