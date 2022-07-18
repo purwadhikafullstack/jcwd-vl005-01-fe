@@ -1,13 +1,11 @@
-import Topbar from "../../../components/admin/topbar/Topbar";
-import Sidebar from "../../../components/admin/sidebar/Sidebar";
 import Axios from "axios";
 import React from "react";
 import styled from "styled-components";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Stack, TextField, Typography } from "@mui/material";
-import Confirmation from "../../../components/admin/alert/Confirmation";
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import Confirmation from "../alert/Confirmation";
 
 const Container = styled.div`
     padding: 20px;
@@ -38,7 +36,8 @@ const CloseBtn = styled.button`
 const Input = styled('input')({
   display: 'none',
 });
-class ProductList extends React.Component{
+
+class ProductList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -217,6 +216,7 @@ class ProductList extends React.Component{
         )
       })
   }
+
   render(){
     const columns = [
       {
@@ -434,6 +434,6 @@ class ProductList extends React.Component{
       </Container>
     );
   }
-}
+};
 
 export default ProductList;
