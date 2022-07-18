@@ -6,8 +6,19 @@ import WidgetSm from "../../../components/admin/widgetSm/WidgetSm";
 import WidgetLg from "../../../components/admin/widgetLg/WidgetLg";
 import Topbar from "../../../components/admin/topbar/Topbar";
 import Sidebar from "../../../components/admin/sidebar/Sidebar";
+import { useSelector } from "react-redux";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const { status } = useSelector((state) => state.admin);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (status === "unverified") {
+      navigate("/admin/resendtoken");
+    }
+  });
   return (
     <div>
       <Topbar />

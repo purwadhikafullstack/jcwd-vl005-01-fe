@@ -4,6 +4,7 @@
 
 .productList {
   flex: 4;
+  height: 100vh;
 }
 
 .productListItem {
