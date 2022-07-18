@@ -1,9 +1,12 @@
 import { Badge } from "@mui/material";
 import { Search, ShoppingCartOutlined } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react"
 import styled from "styled-components";
 import { mobile } from "../../responsive";
 import { Link } from "react-router-dom";
+import Confirmation from './Confirmation'
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   height: 60px;
@@ -59,6 +62,9 @@ const Right = styled.div`
   justify-content: flex-end;
   ${mobile({ flex: 2, justifyContent: "center" })}
 `;
+const TextTop = styled.h2`
+  margin-right: 30px;
+`
 
 const MenuItem = styled.div`
   font-size: 14px;
@@ -71,10 +77,47 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
 `;
+const StyledLinkUser = styled(Link)`
+  text-decoration: none;
+  color: black;
+  margin-right: 30px;
+  font-size: 22px;
+  font-weight: bold ;
+`;
 
 const Navbar = () => {
+  const [confirm, setConfirm] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const token = localStorage.getItem("token")
+  const userData = useSelector((state) => state.user)
+
+  const onButtonLogout = () => {
+    setConfirm(true)
+    setLoading(true)
+  };
+
+  const onButtonConfirmLogout = () => {
+        localStorage.removeItem('token')
+        // localStorage.removeItem('id')
+
+        setLoading(false)
+        setConfirm(false)
+        toast.warning("Logout Success")
+    }
+    const onButtonCancelLogout = () => {
+        setConfirm(false)
+        // setId(null)
+        setLoading(false)
+    }
+
   return (
     <Container>
+      <Confirmation 
+        isConfirm={confirm} 
+        title="Logout Confirmation" 
+        onCancel={onButtonCancelLogout} 
+        onConfirm={onButtonConfirmLogout}
+      />
       <Wrapper>
         <Left>
           <Language>EN</Language>
@@ -89,12 +132,22 @@ const Navbar = () => {
           </StyledLink>
         </Center>
         <Right>
+          { token ? 
+          (<Right>
+            <StyledLinkUser to="/user/profile">Hi, {userData.username}</StyledLinkUser>
+          <button onClick={onButtonLogout}>
+            LOGOUT
+          </button>
+          </Right>)
+          : (<Right>
           <StyledLink to="/register">
             <MenuItem>REGISTER</MenuItem>
           </StyledLink>
           <StyledLink to="/login">
             <MenuItem>SIGN IN</MenuItem>
           </StyledLink>
+          </Right>)
+          }
           <StyledLink to="/cart">
             <MenuItem>
               <Badge badgeContent={4} color="primary">

@@ -10,8 +10,13 @@ import Product from "./pages/user/Product";
 import Home from "./pages/user/Home";
 import ProductList from "./pages/user/ProductList";
 import Register from "./pages/user/Register";
+import RegisDone from "./pages/user/RegisDone";
 import Login from "./pages/user/Login";
 import Cart from "./pages/user/Cart";
+import FPUser from "./pages/user/ForgetPassUs";
+import RPUser from "./pages/user/ResetPassUs";
+import VerifPage from "./pages/user/Verified";
+import ProfileUser from "./pages/user/Profile";
 
 // Import Pages for the Admin side
 import AdminHome from "./pages/admin/home/Home";
@@ -35,26 +40,48 @@ import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
 
+
+
+
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (token) {
-      const user = jwt_decode(token);
-      dispatch(login(user));
-    }
+    const token = localStorage.getItem("token");
+    Axios.get(process.env.REACT_APP_API + "/auth/user/keeplogin", {
+      headers: { authorization: token },
+    // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
+      // headers: { authorization: token },
+    })
+      .then((respond) => {
+        dispatch(login(respond.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
+  const global = useSelector((state) => state.user);
+  console.log("GLOBAL :", global);
+  // const global = useSelector((state) => state.admin);
+  // console.log("GLOBAL :", global);
   const { username } = useSelector((state) => state.admin);
   return (
     <BrowserRouter>
       <ToastContainer theme="colored" position="bottom-center" />
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/:id" element={<Product />} />
       <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/user/forget-pass" element={<FPUser />} />
+        <Route path="/user/reset-pass/:token" element={<RPUser />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/user/regisdone" element={<RegisDone />} />
+        <Route path="/verified" element={<VerifPage />} />
+        <Route path="/user/profile" element={<ProfileUser />} />
 
         <Route
           path="/admin"
