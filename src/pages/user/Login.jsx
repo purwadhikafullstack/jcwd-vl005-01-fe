@@ -88,7 +88,9 @@ export default function Login () {
             console.log("respond :", res.data)
             setLoading(false)
             const servertoken = res.data.token
+            // const servertoken = res.headers.userToken.split(" ")[1]
             // const serverid = res.data.user_id
+            console.log(servertoken);
 
             // save token to localstorage
             localStorage.setItem("token", servertoken)
@@ -105,7 +107,7 @@ export default function Login () {
         })
         .catch((error) => {
             setLoading(false)
-            toast.error(error.response.data)
+            toast.error(error.data)
             console.log(error)
         })
   }
