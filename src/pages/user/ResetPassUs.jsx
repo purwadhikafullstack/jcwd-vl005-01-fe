@@ -4,7 +4,13 @@ import { useDispatch } from "react-redux";
 import Axios from 'axios'
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  CircularProgress
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { mobile } from "../../responsive";
 
@@ -77,6 +83,14 @@ export default function RPUser () {
   const dispatch = useDispatch();
   let userId;
 
+  const showPassword = () => {
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
+
   useEffect(() => {
     Axios.get(
       process.env.REACT_APP_API + `/auth/user/verify-resetpass/${params.token}`
@@ -147,9 +161,39 @@ export default function RPUser () {
         <Title>RESET PASSWORD</Title>
         <p>Insert New Password</p>
         <Form>
-          <Input ref={npass} type="password" placeholder="New Password" />
-          <Input ref={cpass} type="password" placeholder="Confirm Password"/>
-          <Button onClick={onButtonCP}>CHANGE PASSWORD</Button>
+          {/* <Input ref={npass} type="password" placeholder="New Password" /> */}
+          {/* <Input ref={cpass} type="password" placeholder="Confirm Password"/> */}
+          <TextField
+            label="Password"
+            variant="outlined"
+            type={visible ? "text" : "password"}
+            inputRef={npass}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton color="primary" size="large" onClick={showPassword}>
+                    {visible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type={visible ? "text" : "password"}
+            inputRef={cpass}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton color="primary" size="large" onClick={showPassword}>
+                    {visible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Button onClick={onButtonCP}>{loading ? <CircularProgress size={30} color="inherit"/>: "CHANGE PASSWORD"}</Button>
         </Form>
       </Wrapper>
       :
@@ -158,7 +202,7 @@ export default function RPUser () {
         <p>Please re-insert your email to receive reset password instruction.</p>
         <Form>
           <Input ref={email} placeholder="Insert Email"/>
-          <Button onClick={onBtnSendFP}>GET NEW LINK</Button>
+          <Button onClick={onBtnSendFP}>{loading ? <CircularProgress size={30} color="inherit"/>: "GET NEW LINK"}</Button>
         </Form>
       </Wrapper>
       }

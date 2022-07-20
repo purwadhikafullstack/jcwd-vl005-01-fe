@@ -2,8 +2,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
+import { login as loginUser } from "./redux/userSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
+
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -46,24 +48,13 @@ import Reports from "./pages/admin/Reports/Reports";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    Axios.get(process.env.REACT_APP_API + "/auth/user/keeplogin", {
-      headers: { authorization: token },
-    // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
-      // headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(login(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const Usertoken = localStorage.getItem("token");
+    if (Usertoken) {
+      const user = jwt_decode(Usertoken);
+      dispatch(loginUser(user));
+  }
   });
-  const global = useSelector((state) => state.user);
-  console.log("GLOBAL :", global);
-  // const global = useSelector((state) => state.admin);
-  // console.log("GLOBAL :", global);
-  const { username } = useSelector((state) => state.admin);
+
   return (
     <BrowserRouter>
       <ToastContainer theme="colored" position="bottom-center" />
@@ -80,12 +71,12 @@ const App = () => {
         <Route path="/user/reset-pass/:token" element={<RPUser />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/regisdone" element={<RegisDone />} />
-        <Route path="/verified" element={<VerifPage />} />
+        <Route path="/verified/:token" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
 
         <Route
           path="/admin"
-          element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
+          // element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
         />
         <Route
           path="/admin/verify-account/:token"
@@ -93,9 +84,9 @@ const App = () => {
         />
         <Route
           path="/admin/forget-password"
-          element={
-            username ? <Navigate to="/admin/home" /> : <AdminForgetPassword />
-          }
+          // element={
+          //   username ? <Navigate to="/admin/home" /> : <AdminForgetPassword />
+          // }
         />
         <Route
           path="/admin/reset-password/:token"

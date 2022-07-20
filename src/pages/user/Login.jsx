@@ -5,6 +5,14 @@ import Axios from 'axios'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { login } from "../../redux/userSlice";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  CircularProgress
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 
 // import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -51,13 +59,14 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 40%;
+  width: 50%;
   border: none;
   padding: 15px 20px;
   background-color: teal;
   color: white;
   cursor: pointer;
   margin-bottom: 10px;
+  margin-top: 10px;
 `;
 
 const Link = styled.a`
@@ -70,18 +79,25 @@ const Link = styled.a`
 export default function Login () {
   const usern = useRef("")
   const passw = useRef("")
-  // const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const showPassword = () => {
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
   const onButtonLogin = (e) => {
         e.preventDefault()
         const loginuser = {
             usernameOrEmail : usern.current.value,
             password : passw.current.value
         }
-        
+
         setLoading(true)
         Axios.post(process.env.REACT_APP_API+'/auth/user/login', loginuser)
         .then((res) => {
@@ -107,7 +123,7 @@ export default function Login () {
         })
         .catch((error) => {
             setLoading(false)
-            toast.error(error.data)
+            toast.error(error.response.data)
             console.log(error)
         })
   }
@@ -121,9 +137,31 @@ export default function Login () {
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input ref={usern} placeholder="Username or Email" />
-          <Input ref={passw} placeholder="Password" type="password"/>
-          <Button onClick={onButtonLogin}>LOGIN</Button>
+          {/* <Input ref={usern} placeholder="Username or Email" /> */}
+          {/* <Input ref={passw} placeholder="Password" type="password"/> */}
+          <TextField
+            id="outlined-basic"
+            label="Username or Email"
+            variant="outlined"
+            inputRef={usern}
+            type="email"
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type={visible ? "text" : "password"}
+            inputRef={passw}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton color="primary" size="large" onClick={showPassword}>
+                    {visible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+          }}
+          />
+          <Button onClick={onButtonLogin}>{loading ? <CircularProgress size={30} color="inherit"/>: "PROCEED SIGN IN"}</Button>
           <Link href="http://localhost:3000/user/forget-pass">RESET PASSWORD?</Link>
           <Link href="http://localhost:3000/register">CREATE A NEW ACCOUNT</Link>
         </Form>

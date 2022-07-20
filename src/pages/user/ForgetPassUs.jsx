@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import Axios from 'axios'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { toast } from "react-toastify";
-// import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { CircularProgress, Button } from "@mui/material";
 
 import { mobile } from "../../responsive";
 
@@ -53,15 +53,15 @@ const Input = styled.input`
   padding: 10px;
 `;
 
-const Button = styled.button`
-  width: 40%;
-  border: none;
-  padding: 15px 20px;
-  background-color: teal;
-  color: white;
-  cursor: pointer;
-  margin-bottom: 10px;
-`;
+// const Button = styled.button`
+//   width: 40%;
+//   border: none;
+//   padding: 15px 20px;
+//   background-color: teal;
+//   color: white;
+//   cursor: pointer;
+//   margin-bottom: 10px;
+// `;
 
 const Link = styled.a`
   margin: 5px 0px;
@@ -86,7 +86,7 @@ export default function FPUser () {
         .then((respond) => {
             console.log(respond.data)
             setLoading(false)
-
+            email.current.value = ""
             toast.info(respond.data)
         })
         .catch((error) => {
@@ -105,7 +105,13 @@ export default function FPUser () {
         <Form>
           <Input ref={email} placeholder="Insert Email" />
           <Formrow>
-            <Button onClick={onBtnSendFP}>SEND EMAIL</Button>
+            <Button 
+              onClick={onBtnSendFP}
+              variant="contained"
+              color="info"
+              size="large"
+              disabled={loading}
+            >{loading ? <CircularProgress size={30} color="inherit"/>: "SEND EMAIL"}</Button>
             <Link href="http://localhost:3000/login">BACK TO LOGIN</Link>
           </Formrow>
         </Form>

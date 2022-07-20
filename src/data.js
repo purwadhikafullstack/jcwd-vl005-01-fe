@@ -5,24 +5,24 @@ import jacket from "./assets/jacket.png";
 export const sliderItems = [
   {
     id: 1,
-    img: slider1,
-    title: "WINTER SALE",
-    desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "f5fafd",
+    img: "https://img.freepik.com/premium-photo/portrait-beautiful-young-female-applying-perfume-isolated-white-background_650366-1486.jpg?w=2000",
+    title: "STAND OUT AMONG OTHERS",
+    desc: "SHOP HIGH QUALITY PARFUME TO SHOW YOUR PRESENCE AND GIVE AMAZING FIRST IMPRESSION.",
+    bg: "EFF1F5",
   },
   {
     id: 2,
-    img: "https://i.ibb.co/DG69bQ4/2.png",
-    title: "AUTUMN COLLECTION",
+    img: "https://static.toiimg.com/photo/msid-56352286/56352286.jpg?4702264",
+    title: "FEMALE COLLECTION",
     desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "fcf1ed",
+    bg: "EBDADE",
   },
   {
     id: 3,
-    img: "https://i.ibb.co/cXFnLLV/3.png",
-    title: "LOUNGEWEAR LOVE",
+    img: "https://img.fragrancex.com/images/articles/how-to-apply-cologne/how-to-apply-cologne-1.jpg",
+    title: "MALE COLLECTION",
     desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "fbf0f4",
+    bg: "EED5AE",
   },
 ];
 

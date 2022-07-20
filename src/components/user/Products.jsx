@@ -3,7 +3,9 @@ import Product from "./ProductCard";
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Pagination } from "@mui/material";
 import Paginations from "./Paginations";
+import ProductPagination from "./ProductsPagination";
 
 const Box = styled.div`
   padding: 20px;
@@ -23,11 +25,11 @@ const Title = styled.h2`
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState("");
-  const [searchQuery, setsearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
-  const [page, setPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(5);
+  // const [category, setCategory] = useState("");
+  // const [searchQuery, setsearchQuery] = useState("");
+  // const [sortOrder, setSortOrder] = useState("");
+  // const [page, setPage] = useState(1);
+  // const [productsPerPage, setProductsPerPage] = useState(5);
 
   const [search, setSearch] = useSearchParams();
 
@@ -43,14 +45,14 @@ const Products = () => {
     !searchTerm && !searchCate && !searchSort
       ? products
       : products
-          ?.filter((selling) => {
+          ?.filter((instore) => {
             if (searchTerm)
-              return selling?.product_name
+              return instore?.product_name
                 .toLowerCase()
                 .includes(searchTerm.toLowerCase());
-            if (searchCate === "all") return selling;
-            if (searchCate === "male") return selling?.gender === "male";
-            if (searchCate === "female") return selling?.gender === "women";
+            if (searchCate === "all") return instore;
+            if (searchCate === "male") return instore?.gender === "male";
+            if (searchCate === "female") return instore?.gender === "women";
           })
           .sort((a, b) => {
             if (searchSort === "high price") return b.price - a.price;
@@ -71,12 +73,11 @@ const Products = () => {
       .then((res) => {
         setProducts(() => res.data);
         console.log(res);
-        setPage(1);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [page, productsPerPage]);
+  }, []);
 
   return (
     <Box className="position-relative">
@@ -86,12 +87,17 @@ const Products = () => {
           <Product productData={product} key={index} />
         ))}
       </Container>
+      {/* <ProductPagination/> */}
       <Paginations
         paginate={paginate}
         postsPerPage={postsPerPage}
         totalPosts={products.length}
       />
-      {/* <Pagination margin count={10} variant="outlined" /> */}
+      {/* <Pagination 
+        count={count} 
+        page={page}
+        onChange={handleChange}
+        variant="outlined" /> */}
     </Box>
   );
 };

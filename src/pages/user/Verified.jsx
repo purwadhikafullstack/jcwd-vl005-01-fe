@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { useRef, useState } from 'react'
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Axios from 'axios'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 // import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -73,6 +73,20 @@ const Link = styled.a`
 
 export default function VerifPage () {
     const Navigate = useNavigate();
+    const params = useParams();
+    const [validToken, setValidToken] = useState(false);
+    
+    useEffect(() => {
+      Axios.get(
+        process.env.REACT_APP_API + `/auth/verify/${params.token}`
+      )
+        .then((respond) => {
+          setValidToken(true);
+        })
+        .catch((error) => {
+          setValidToken(false);
+        });
+    });
 
     const proceed = () => {
         Navigate('/')
@@ -80,11 +94,18 @@ export default function VerifPage () {
 
   return (
     <Container>
+      {validToken ? 
       <Wrapper>
         <Title>VERIFICATION DONE</Title>
         <p>Thank you for verifying your email account and now your good to go</p>
         <Button onClick={proceed}>Proceed to Homepage</Button>
       </Wrapper>
+      :<Wrapper>
+        <Title>INVALID / EXPIRED LINK</Title>
+        <p>It looks like your link was invalid or expired, you still can log in to your account and verify later</p>
+        <Button onClick={proceed}>Proceed to Homepage</Button>
+      </Wrapper>
+      }
     </Container>
   );
 };

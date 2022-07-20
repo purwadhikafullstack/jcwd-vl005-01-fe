@@ -99,11 +99,11 @@ export default function ProductsFilter() {
       <FormControl fullWidth>
         <FormLabel>Sort by</FormLabel>
         <Select
-          // id="demo-simple-select"
+          id="demo-simple-select"
         //   value="sort"
           onChange={handleSort}
-          label="Sort Product"
-        //   defaultValue="sort"
+        //   label="Sort"
+          defaultValue="latest"
           // onChange={handleChange}
         >
           <MenuItem value="latest">Latest</MenuItem>

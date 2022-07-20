@@ -20,7 +20,7 @@ export default function ProductCard({productData}) {
             {productData.product_name}
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            Rp {productData.price}
+            Rp {parseInt(productData.price).toLocaleString('de')}
           </Typography>
           <Button variant='contained'>cart</Button>
         </CardContent>
