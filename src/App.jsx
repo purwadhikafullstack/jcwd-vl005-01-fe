@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
-import Axios from "axios";
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -44,28 +43,14 @@ import Reports from "./pages/admin/Reports/Reports";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const adminToken = localStorage.getItem("adminToken");
     if (adminToken) {
       const user = jwt_decode(adminToken);
       dispatch(login(user));
     }
-    Axios.get(process.env.REACT_APP_API + "/auth/user/keeplogin", {
-      headers: { authorization: token },
-      // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
-      // headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(login(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   });
   const global = useSelector((state) => state.user);
   console.log("GLOBAL :", global);
-  // const global = useSelector((state) => state.admin);
-  // console.log("GLOBAL :", global);
   const { username } = useSelector((state) => state.admin);
   return (
     <BrowserRouter>
