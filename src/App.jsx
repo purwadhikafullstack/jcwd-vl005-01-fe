@@ -40,29 +40,17 @@ import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
 
-
-
-
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    Axios.get(process.env.REACT_APP_API + "/auth/user/keeplogin", {
-      headers: { authorization: token },
-    // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
-      // headers: { authorization: token },
-    })
-      .then((respond) => {
-        dispatch(login(respond.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const adminToken = localStorage.getItem("adminToken");
+    if (adminToken) {
+      const user = jwt_decode(adminToken);
+      dispatch(login(user));
+    }
   });
   const global = useSelector((state) => state.user);
   console.log("GLOBAL :", global);
-  // const global = useSelector((state) => state.admin);
-  // console.log("GLOBAL :", global);
   const { username } = useSelector((state) => state.admin);
   return (
     <BrowserRouter>
@@ -71,7 +59,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<Product />} />
-      <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
