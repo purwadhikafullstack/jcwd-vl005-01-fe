@@ -42,19 +42,23 @@ import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
 
-
-
-
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const Usertoken = localStorage.getItem("token");
+    const adminToken = localStorage.getItem("adminToken");
     if (Usertoken) {
       const user = jwt_decode(Usertoken);
       dispatch(loginUser(user));
-  }
+    }
+    if (adminToken) {
+      const user = jwt_decode(adminToken);
+      dispatch(login(user));
+    }
   });
-
+  const global = useSelector((state) => state.user);
+  console.log("GLOBAL :", global);
+  const { username } = useSelector((state) => state.admin);
   return (
     <BrowserRouter>
       <ToastContainer theme="colored" position="bottom-center" />
@@ -62,7 +66,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<Product />} />
-      <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
