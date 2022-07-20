@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
+import Axios from "axios";
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -40,16 +41,18 @@ import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
 
-
-
-
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const adminToken = localStorage.getItem("adminToken");
+    if (adminToken) {
+      const user = jwt_decode(adminToken);
+      dispatch(login(user));
+    }
     Axios.get(process.env.REACT_APP_API + "/auth/user/keeplogin", {
       headers: { authorization: token },
-    // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
+      // Axios.get(process.env.REACT_APP_API + "/auth/admin/keeplogin", {
       // headers: { authorization: token },
     })
       .then((respond) => {
@@ -71,7 +74,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<Product />} />
-      <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
