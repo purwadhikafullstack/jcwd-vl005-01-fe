@@ -1,4 +1,13 @@
 import styled from "styled-components";
+import React, { useRef, useState } from 'react'
+import { useDispatch } from "react-redux";
+import Axios from 'axios'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { toast } from "react-toastify";
+import { login } from "../../redux/userSlice";
+
+// import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { mobile } from "../../responsive";
 
 const Container = styled.div`
@@ -26,6 +35,7 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
+  font-weight:bold;
 `;
 
 const Form = styled.form`
@@ -57,21 +67,68 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-const Login = () => {
+export default function Login () {
+  const usern = useRef("")
+  const passw = useRef("")
+  // const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onButtonLogin = (e) => {
+        e.preventDefault()
+        const loginuser = {
+            usernameOrEmail : usern.current.value,
+            password : passw.current.value
+        }
+        
+        setLoading(true)
+        Axios.post(process.env.REACT_APP_API+'/auth/user/login', loginuser)
+        .then((res) => {
+            console.log("respond :", res.data)
+            setLoading(false)
+            const servertoken = res.data.token
+            // const servertoken = res.headers.userToken.split(" ")[1]
+            // const serverid = res.data.user_id
+            console.log(servertoken);
+
+            // save token to localstorage
+            localStorage.setItem("token", servertoken)
+            // localStorage.setItem("id", serverid)
+
+            // // save user data to global state
+            dispatch(login(res.data))
+
+            // if success
+            toast.success("Login Success")
+
+            // redirect to home page
+            navigate("/")
+        })
+        .catch((error) => {
+            setLoading(false)
+            toast.error(error.data)
+            console.log(error)
+        })
+  }
+
+    // protection
+    const token = localStorage.getItem('token')
+    if (token) return <Navigate to="/"/>
+
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
         <Form>
-          <Input placeholder="username" />
-          <Input placeholder="password" />
-          <Button>LOGIN</Button>
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link>CREATE A NEW ACCOUNT</Link>
+          <Input ref={usern} placeholder="Username or Email" />
+          <Input ref={passw} placeholder="Password" type="password"/>
+          <Button onClick={onButtonLogin}>LOGIN</Button>
+          <Link href="http://localhost:3000/user/forget-pass">RESET PASSWORD?</Link>
+          <Link href="http://localhost:3000/register">CREATE A NEW ACCOUNT</Link>
         </Form>
       </Wrapper>
     </Container>
   );
 };
 
-export default Login;
