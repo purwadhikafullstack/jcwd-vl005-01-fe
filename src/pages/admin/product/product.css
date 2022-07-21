@@ -1,5 +1,6 @@
 .productlistWrapper {
     display: flex;
+    width: 100%;
   }
   .productList {
     flex: 4;

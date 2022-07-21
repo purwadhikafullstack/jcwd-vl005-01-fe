@@ -8,10 +8,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import Confirmation from "../alert/Confirmation";
 
 const Container = styled.div`
-    padding: 20px;
+    padding: 5px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+`;
+
+const Title = styled.h2`
+  margin: 10px;
+  font-weight: normal;
 `;
 
 
@@ -41,26 +46,38 @@ class ProductList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-        dbProduct:[],
+        dbProductDetails:[],
         dbCategory:[],
         deleteId: '',
         editId: '',
         alertDelete: false,
         addOpen: false,
-        name: null,
-        price: null,
-        weight_gram: null,
-        description: null,
-        img_url: null,
-        categoryId: '',
+        productId:null,
+        warehouseId:null,
+        stock:null,
+        reserved_stock:null,
         editOpen: false,
-        openImage: false
+        openImage: false,
+        dbWarehouse:[],
+        dbProduct:[]
     }
   }
 
   componentDidMount() {
     this.getProductList();
     this.getCategories();
+    this.getWarehouse();
+    this.getProductListDetails();
+  }
+
+  getProductListDetails = () => {
+    Axios.get(process.env.REACT_APP_API+'/admin/products/details')
+    .then((response) => {
+        this.setState({dbProductDetails: response.data})
+    })
+    .catch(err=> {
+        console.log(err);
+    })
   }
 
   getProductList = () => {
@@ -86,10 +103,10 @@ class ProductList extends React.Component {
   onButtonConfirmDelete = () => {
     this.setState({alertDelete: false});
 
-    Axios.delete(process.env.REACT_APP_API+`/admin/products/${this.state.deleteId}`)
+    Axios.delete(process.env.REACT_APP_API+`/admin/products/stock/${this.state.deleteId}`)
     .then((response) => {
       alert('Successfully Deleted!');
-      this.getProductList();
+      this.getProductListDetails();
       this.setState({deleteId: null});
     })
     .catch((err) =>{
@@ -99,51 +116,47 @@ class ProductList extends React.Component {
     })
   }
 
-  btnCancel = () => {
-    this.setState({addOpen: true})
-    this.setState({name: null})
-    this.setState({price: null})
-    this.setState({weight_gram: null})
-    this.setState({describe: null})
-    this.setState({img_url: null})
-    this.setState({categoryId: null})
+  getWarehouse = () => {
+    Axios.get(process.env.REACT_APP_API+ '/admin/warehouse')
+    .then((response) =>{
+      this.setState({dbWarehouse: response.data})
+    })
+    .catch((err) =>{
+        console.log(err);
+        alert(err);
+    })
   }
 
-  addProduct = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", this.state.name);
-    formData.append("price", this.state.price);
-    formData.append("weight_gram",this.state.weight_gram);
-    formData.append("description", this.state.description);
-    formData.append("file", this.state.img_url);
-    formData.append("categoryId", this.state.categoryId)
-   
-    console.log(formData);
+  btnCancel = () => {
+    this.setState({addOpen: true})
+    this.setState({productId: null})
+    this.setState({warehouseId: null})
+    this.setState({stock: null})
+    this.setState({reserved_stock: null})
+  }
 
-    Axios.post(process.env.REACT_APP_API + '/admin/products', formData)
+  addStock = (e) => {
+    e.preventDefault();
+
+    Axios.post(process.env.REACT_APP_API + '/admin/products/stock', {product_id:this.state.productId , warehouse_id:this.state.warehouseId,stock:this.state.stock,reserved_stock:this.state.reserved_stock})
     .then((response) => {
-        console.log("Successfully Added New Category!");
-        this.setState({addOpen: false});
-        alert('Successfully Added New Category!');
-        this.setState({name: null})
-        this.setState({price: null})
-        this.setState({weight_gram: null})
-        this.setState({description: null})
-        this.setState({img_url: null})
-        this.setState({categoryId: null})
-        this.getProductList();
-        
+        console.log("Successfully Added New Stock!");
+        alert('Successfully Added New Stock!');
+        this.setState({addOpen: false})
+        this.setState({productId: null})
+        this.setState({warehouseId: null})
+        this.setState({stock: null})
+        this.setState({reserved_stock: null})
+        this.getProductListDetails();
+
     })
     .catch(err => {
         console.log(err);
         alert(err)
-        this.setState({name: null})
-        this.setState({price: null})
-        this.setState({weight_gram: null})
-        this.setState({description: null})
-        this.setState({img_url: null})
-        this.setState({categoryId: null})
+        this.setState({product_id: null})
+        this.setState({warehouseId: null})
+        this.setState({stock: null})
+        this.setState({reserved_stock: null})
     })
   }
 
@@ -151,39 +164,27 @@ class ProductList extends React.Component {
     this.setState({editId: null});
   }
   
-  editProduct = () => {
-      const formData = new FormData();
-      formData.append("name", this.state.name);
-      formData.append("price", this.state.price);
-      formData.append("weight_gram",this.state.weight_gram);
-      formData.append("description", this.state.description);
-      formData.append("file", this.state.img_url);
-      formData.append("categoryId", this.state.categoryId);
-      // {name: this.state.name, price: this.state.price, weight_gram:this.state.weight_gram, description: this.state.description, file: this.state.img_url, categoryId: this.state.categoryId}
-      Axios.patch(process.env.REACT_APP_API+`/admin/products/${this.state.editId}`, formData)
+  editStock = () => {
+      
+      Axios.patch(process.env.REACT_APP_API+`/admin/products/stock/${this.state.editId}`, {warehouse_id:this.state.warehouseId,stock:this.state.stock,reserved_stock:this.state.reserved_stock})
       .then((response) => {
           alert('Successfully Updated Product');
           this.setState({editOpen: false});
           this.setState({editId: null})
-          this.setState({name: null})
-          this.setState({price: null})
-          this.setState({weight_gram: null})
-          this.setState({description: null})
-          this.setState({img_url: null})
-          this.setState({categoryId: null})
-          this.getProductList();
+          this.setState({warehouseId: null})
+          this.setState({stock: null})
+          this.setState({reserved_stock: null})
+          this.getProductListDetails();
           
       })
       .catch((err) => {
           console.log(err);
           alert(err)
+          this.setState({editOpen: false});
           this.setState({editId: null})
-          this.setState({name: null})
-          this.setState({price: null})
-          this.setState({weight_gram: null})
-          this.setState({description: null})
-          this.setState({img_url: null})
-          this.setState({categoryId: null})
+          this.setState({warehouseId: null})
+          this.setState({stock: null})
+          this.setState({reserved_stock: null})
       })
 
   }
@@ -208,13 +209,21 @@ class ProductList extends React.Component {
       console.log(err);
   })
   }
-  
-  printCategory = () => {
-    return this.state.dbCategory.map((item, index) => {
+
+  printProductList = () => {
+    return this.state.dbProduct.map((item, index) => {
       return(
-            <MenuItem value={item.categoryId}>{item.categoryName}</MenuItem>
+            <MenuItem value={item.id}>{item.name}</MenuItem>
         )
-      })
+    })
+  }
+
+  printWarehouseList = () => {
+    return this.state.dbWarehouse.map((item, index) => {
+      return(
+            <MenuItem value={item.id}>{item.name_location}</MenuItem>
+        )
+    })
   }
 
   render(){
@@ -231,12 +240,15 @@ class ProductList extends React.Component {
           )
         }
       },
-      {field : 'id', headerName: 'Products ID', width:120},
+      {field : 'id', headerName: 'Stock ID', width:120},
       {field : 'name', headerName: 'Products Name', width:350},
       {field : 'price', headerName: 'Price', width:150},
       {field : 'weight_gram', headerName: 'Weight (Gram)', width:150},
       {field : 'description', headerName: 'Details', width:500},
       {field : 'categoryName', headerName: 'Category Name', width:200},
+      {field : 'name_location', headerName: 'Warehouse', width: 120},
+      {field : 'stock', headerName: 'Stock', width: 120},
+      {field : 'reserved_stock', headerName: 'Reserved Stock', width: 150},
       {
         field: "Action",
         width:250,
@@ -274,8 +286,11 @@ class ProductList extends React.Component {
     
     return (
       <Container>
+        <Box sx={{marginBottom: '10px'}}>
+          <Title>Warehouse Management Product</Title>
+          <Button size="small" onClick={() => this.btnCancel()}><AddIcon/>Add Stock</Button>
+        </Box>
         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-          <Button size="small" onClick={() => this.btnCancel()}><AddIcon/>Add Products</Button>
           <Modal
             open={this.state.addOpen}
           >
@@ -285,79 +300,67 @@ class ProductList extends React.Component {
                 </Box>
                 <Box marginTop='30px'>
                   <Typography id="modal-modal-title" variant="h6" component="h2" color='#008080' textAlign='center' fontWeight='bold'>
-                    Insert New Product
+                    Insert Stock
                   </Typography>
                   <br/>
                   <Stack spacing='20px'>
-                    
-                    <FormControl>
-                      <TextField fullWidth label="Product Name" id="name"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.name}
-                        size='small'
-                        name="name"
-                        required
-                      />
-                    </FormControl>
 
                     <FormControl>
-                        <TextField fullWidth label="Price" id="price"
-                          onChange ={(event) => this.handleUserInput(event)}
-                          value = {this.state.price}
-                          size='small'
-                          name="price"
+                      <InputLabel id="product-select">Product</InputLabel>
+                        <Select
+                          labelId="product-select"
+                          id="categoryId"
+                          value={this.state.productId}
+                          label="Product"
+                          onChange={(event) => this.handleUserInput(event)}
+                          name="productId"
+                          size= 'medium'
                           required
-                        />
+                        >
+                          {this.printProductList()}
+                        </Select>
                     </FormControl>
                     
                     <FormControl>
-                      <TextField fullWidth label="Weight(Gram)" id="weight_gram"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.weight_gram}
-                        size='small'
-                        name="weight_gram"
-                        required
-                      />
+                      <InputLabel id="warehouse-select">Warehouse</InputLabel>
+                          <Select
+                            labelId="warehouse-select"
+                            id="warehouseId"
+                            value={this.state.warehouseId}
+                            label="Warehouse"
+                            onChange={(event) => this.handleUserInput(event)}
+                            name="warehouseId"
+                            size= 'medium'
+                            required
+                          >
+                            {this.printWarehouseList()}
+                          </Select>
                     </FormControl>
 
                    <FormControl>
-                      <TextField fullWidth label="Description" id="description"
+                      <TextField fullWidth label="Stock" id="stock"
                         onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.description}
-                        size='small'
-                        name="description"
+                        value = {this.state.stock}
+                        size='medium'
+                        name="stock"
                         required
+
                       />
                    </FormControl>
 
                     <FormControl>
-                      <InputLabel id="category-select">Category</InputLabel>
-                      <Select
-                        labelId="category-select"
-                        id="categoryId"
-                        value={this.state.categoryId}
-                        label="Category"
-                        onChange={(event) => this.handleUserInput(event)}
-                        name="categoryId"
-                        size= 'medium'
-                        required
-                      >
-                        {this.printCategory()}
-                      </Select>
+                      <TextField fullWidth label="Reserved Stock" id="reserved_stock"
+                          onChange ={(event) => this.handleUserInput(event)}
+                          value = {this.state.reserved_stock}
+                          size='medium'
+                          name="reserved_stock"
+                          required
+                          
+                      />
                     </FormControl>
 
-                    <InputLabel id="category-select" required>Upload Image</InputLabel>
-                    <Box color='neutral' display='flex' flex-direction='row' justifyContent='center' alignItems='center' width='100%' height='100px' border='1px dotted #508dcd'>
-                      <label htmlFor="productMenu">
-                        <Input accept="image/*" id="productMenu" multiple type="file" onChange={(e) => this.setState({img_url: e.target.files[0]})}/>
-                        <Button variant="contained" component="span" sx={{backgroundColor: '#90caf9'}}>
-                          Upload
-                        </Button>
-                      </label>
-                    </Box>
-
                     <Box mt='10px' display='flex' justifyContent='center'>
-                      <Button variant="contained" onClick={this.addProduct}>ADD PRODUCT</Button>
+                      <Button variant="contained" onClick={this.addStock}>ADD STOCK</Button>
                     </Box>
                   </Stack>
                 </Box>
@@ -375,80 +378,63 @@ class ProductList extends React.Component {
                     Edit Product
                   </Typography>
                   <br/>
-                  <Stack spacing='20px'>
-                    
-                    <FormControl>
-                      <TextField fullWidth label="Product Name" id="name"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.name}
-                        size='small'
-                        name="name"
-                      />
-                    </FormControl>
+                  <Stack spacing='20px'>   
+                      
+                      <FormControl>
+                        <InputLabel id="warehouse-select">Warehouse</InputLabel>
+                            <Select
+                              labelId="warehouse-select"
+                              id="warehouseId"
+                              value={this.state.warehouseId}
+                              label="Warehouse"
+                              onChange={(event) => this.handleUserInput(event)}
+                              name="warehouseId"
+                              size= 'medium'
+                              required
+                            >
+                              {this.printWarehouseList()}
+                            </Select>
+                      </FormControl>
 
                     <FormControl>
-                      <TextField fullWidth label="Price" id="price"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.price}
-                        size='small'
-                        name="price"
-                      />
-                    </FormControl>
-                    
-                    <FormControl>
-                      <TextField fullWidth label="Weight(Gram)" id="weight_gram"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.weight_gram}
-                        size='small'
-                        name="weight_gram"
-                      />
+                        <TextField fullWidth label="Stock" id="stock"
+                          onChange ={(event) => this.handleUserInput(event)}
+                          value = {this.state.stock}
+                          size='medium'
+                          name="stock"
+                          required
+                          inputProps={{ inputMode: 'numeric'}}
+                        />
                     </FormControl>
 
-                    <FormControl>
-                      <TextField fullWidth label="Description" id="description"
-                        onChange ={(event) => this.handleUserInput(event)}
-                        value = {this.state.description}
-                        size='small'
-                        name="description"
-                      />
-                    </FormControl>
-                    
-                    <FormControl>
-                      <InputLabel id="category-select">Category</InputLabel>
-                      <Select
-                        labelId="category-select"
-                        id="categoryId"
-                        value={this.state.categoryId}
-                        label="Category"
-                        onChange={(event) => this.handleUserInput(event)}
-                        name="categoryId"
-                        size='medium'
-                      >
-                        {this.printCategory()}
-                      </Select>
-                    </FormControl>
+                      <FormControl>
+                        <TextField fullWidth label="Reserved Stock" id="reserved_stock"
+                            onChange ={(event) => this.handleUserInput(event)}
+                            value = {this.state.reserved_stock}
+                            size='medium'
+                            name="reserved_stock"
+                            required
+                            inputProps={{ inputMode: 'numeric'}}
+                        />
+                      </FormControl>
 
-                    <InputLabel id="category-select">Upload Image</InputLabel>
-                    <Box color='neutral' display='flex' flex-direction='row' justifyContent='center' alignItems='center' width='100%' height='100px' border='1px dotted #508dcd'>
-                      <label htmlFor="productMenu">
-                        <Input accept="image/*" id="productMenu" multiple type="file" onChange={(e) => this.setState({img_url: e.target.files[0]})}/>
-                        <Button variant="contained" component="span" sx={{backgroundColor: '#90caf9'}}>
-                          Upload
-                        </Button>
-                      </label>
-                    </Box>
-
-                    <Box mt='10px' display='flex' justifyContent='center'>
-                      <Button variant="contained" onClick={this.editProduct}>EDIT PRODUCT</Button>
-                    </Box>
+                      <Box mt='10px' display='flex' justifyContent='center'>
+                        <Button variant="contained" onClick={this.editStock}>ADD STOCK</Button>
+                      </Box>
                   </Stack>
                 </Box>
             </Box>
           </Modal>
         </Stack>
-        <div style={{ height: '700px', width: '100%' }}>
+        <div style={{ height: '350px', width: '100%' }}>
           <Confirmation isOpen={this.state.alertDelete} title="Confirmation Delete" onCancel={this.onButtonCancelDelete} onConfirm={this.onButtonConfirmDelete}/>
-          <DataGrid rows={this.state.dbProduct} columns={columns} components={{ Toolbar: GridToolbar }} />
+          <DataGrid 
+            rows={this.state.dbProductDetails} 
+            columns={columns} 
+            components={{ Toolbar: GridToolbar }} 
+            pageSize={3}
+            rowsPerPageOptions={[3]}
+          />
         </div>
       </Container>
     );
