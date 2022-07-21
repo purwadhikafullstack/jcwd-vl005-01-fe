@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Paper from '@mui/material/Paper';
 import RowCategory, {RowCategoryEdit} from "./row-category";
 import Confirmation from "../../../components/admin/alert/Confirmation";
+import "./product.css";
 
 const Container = styled.div``;
 
@@ -79,7 +80,7 @@ class AdminProductList extends React.Component{
   }
 
   getProductList = () => {
-      Axios.get('http://localhost:5000/api/products')
+      Axios.get(process.env.REACT_APP_API + "/admin/products")
       .then((response) => {
           this.setState({dbProduct: response.data})
       })
@@ -89,7 +90,7 @@ class AdminProductList extends React.Component{
   }
 
   getCategories = () => {
-    Axios.get('http://localhost:5000/api/categories')
+    Axios.get(process.env.REACT_APP_API+ "/admin/categories")
     .then((response) => {
         this.setState({dbCategory: response.data})
     })
@@ -103,7 +104,7 @@ class AdminProductList extends React.Component{
   }
 
   addCategory = () => {
-    Axios.post('http://localhost:5000/api/categories', {categoryName: this.state.categoryName})
+    Axios.post(process.env.REACT_APP_API + "/admin/categories", {categoryName: this.state.categoryName})
     .then((response) => {
         console.log("Successfully Added New Category!");
         this.setState({openNew: false});
@@ -127,7 +128,7 @@ class AdminProductList extends React.Component{
   onButtonConfirmDelete = () => {
     this.setState({alertDelete: false});
 
-    Axios.delete(`http://localhost:5000/api/categories/${this.state.deleteId}`)
+    Axios.delete(process.env.REACT_APP_API + `/admin/categories/${this.state.deleteId}`)
     .then((response) => {
       alert('Successfully Deleted!');
       this.getCategories();
@@ -162,7 +163,7 @@ class AdminProductList extends React.Component{
   }
 
   onButtonConfirmEdit = () => {
-    Axios.patch(`http://localhost:5000/api/categories/${this.state.editId}`, {categoryName: this.state.categoryName})
+    Axios.patch(process.env.REACT_APP_API+`/admin/categories/${this.state.editId}`, {categoryName: this.state.categoryName})
     .then((response) => {
       alert("Successfully Updated!");
       this.getCategories();
@@ -205,72 +206,74 @@ class AdminProductList extends React.Component{
     return (
       <Container>
         <Topbar />
-        <Sidebar />
-        <Container>
-          <Title>Products</Title>
-          <Box display='flex' flexDirection='row' alignItems='center'>
-            <Box paddingRight='20px' paddingLeft='20px'>
-              <Button onClick={()=> this.setState({openNew: true})}>ADD NEW CATEGORY</Button>
-              <Modal
-                open={this.state.openNew}
-                onClose={()=> this.setState({openNew: false})}
-                aria-labelledby="modal-modal-title"
-              >
-                <Box sx={style}>
-                  <Box position='absolute' right='5%'>
-                    <CloseBtn onClick={()=> this.setState({openNew: false})}><CloseIcon sx={{color: '#008080'}}/></CloseBtn>
-                  </Box>
-                  <Box marginTop='30px'>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" color='#008080' textAlign='center' fontWeight='bold'>
-                      Insert New Category
-                    </Typography>
-                    <br/>
-                    <TextField fullWidth label="Category Name" id="categoryName"
-                      value={this.state.categoryName}
-                      onChange ={this.handleInputChange}
-                    />
+        <div className="productlistWrapper">
+          <Sidebar />
+          <div className="productList">
+            <Title>Products</Title>
+            <Box display='flex' flexDirection='row' alignItems='center'>
+              <Box paddingRight='20px' paddingLeft='20px'>
+                <Button onClick={()=> this.setState({openNew: true})}>ADD NEW CATEGORY</Button>
+                <Modal
+                  open={this.state.openNew}
+                  onClose={()=> this.setState({openNew: false})}
+                  aria-labelledby="modal-modal-title"
+                >
+                  <Box sx={style}>
+                    <Box position='absolute' right='5%'>
+                      <CloseBtn onClick={()=> this.setState({openNew: false})}><CloseIcon sx={{color: '#008080'}}/></CloseBtn>
+                    </Box>
+                    <Box marginTop='30px'>
+                      <Typography id="modal-modal-title" variant="h6" component="h2" color='#008080' textAlign='center' fontWeight='bold'>
+                        Insert New Category
+                      </Typography>
                       <br/>
-                    <br/>
-                    <SaveBtn onClick={this.addCategory}>ADD CATEGORY</SaveBtn>
+                      <TextField fullWidth label="Category Name" id="categoryName"
+                        value={this.state.categoryName}
+                        onChange ={this.handleInputChange}
+                      />
+                        <br/>
+                      <br/>
+                      <SaveBtn onClick={this.addCategory}>ADD CATEGORY</SaveBtn>
+                    </Box>
                   </Box>
-                </Box>
-              </Modal>
-              <Button onClick={()=> this.setState({openEdit: true})}>EDIT CATEGORY</Button>
-              <Modal
-                open={this.state.openEdit}
-                // onClose={()=> this.setState({openEdit: false})}
-                aria-labelledby="modal-modal-title"
-              >
-                <Box sx={style}>
-                  <Box position='absolute' right='5%'>
-                    <CloseBtn onClick={()=> this.setState({openEdit: false})}><CloseIcon sx={{color: '#008080'}}/></CloseBtn>
+                </Modal>
+                <Button onClick={()=> this.setState({openEdit: true})}>EDIT CATEGORY</Button>
+                <Modal
+                  open={this.state.openEdit}
+                  // onClose={()=> this.setState({openEdit: false})}
+                  aria-labelledby="modal-modal-title"
+                >
+                  <Box sx={style}>
+                    <Box position='absolute' right='5%'>
+                      <CloseBtn onClick={()=> this.setState({openEdit: false})}><CloseIcon sx={{color: '#008080'}}/></CloseBtn>
+                    </Box>
+                    <Box marginTop='30px'>
+                      <Typography id="modal-modal-titl e" variant="h6" component="h2" color='#008080' textAlign='center' fontWeight='bold'>
+                        Edit Category
+                      </Typography>
+                      <TableContainer component={Paper} sx={{marginTop:'20px'}}>
+                        <Table size="small" aria-label="a dense table">
+                            <TableHead>
+                              <TableRow>
+                                <TableCell align="center" sx={{fontWeight: "bold"}}>No.</TableCell>
+                                <TableCell align="center" sx={{fontWeight: "bold"}}>Category Name</TableCell>
+                                <TableCell align="center" sx={{fontWeight: "bold"}}>Actions</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <Confirmation isOpen={this.state.alertDelete} title="Confirmation Delete" onCancel={this.onButtonCancelDelete} onConfirm={this.onButtonConfirmDelete}/>
+                              {this.printAllCategories()}
+                            </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Box>
                   </Box>
-                  <Box marginTop='30px'>
-                    <Typography id="modal-modal-titl e" variant="h6" component="h2" color='#008080' textAlign='center' fontWeight='bold'>
-                      Edit Category
-                    </Typography>
-                    <TableContainer component={Paper}>
-                      <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>No.</TableCell>
-                              <TableCell>Category Name</TableCell>
-                              <TableCell>Actions</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            <Confirmation isOpen={this.state.alertDelete} title="Confirmation Delete" onCancel={this.onButtonCancelDelete} onConfirm={this.onButtonConfirmDelete}/>
-                            {this.printAllCategories()}
-                          </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Box>
-                </Box>
-              </Modal>
+                </Modal>
+              </Box>
             </Box>
-          </Box>
-          <Products />
-        </Container>
+            <Products />
+          </div>
+        </div>
       </Container>
     );
   }

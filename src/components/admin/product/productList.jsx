@@ -64,7 +64,7 @@ class ProductList extends React.Component {
   }
 
   getProductList = () => {
-    Axios.get('http://localhost:5000/api/products')
+    Axios.get(process.env.REACT_APP_API+'/admin/products')
     .then((response) => {
         this.setState({dbProduct: response.data})
     })
@@ -86,7 +86,7 @@ class ProductList extends React.Component {
   onButtonConfirmDelete = () => {
     this.setState({alertDelete: false});
 
-    Axios.delete(`http://localhost:5000/api/products/${this.state.deleteId}`)
+    Axios.delete(process.env.REACT_APP_API+`/admin/products/${this.state.deleteId}`)
     .then((response) => {
       alert('Successfully Deleted!');
       this.getProductList();
@@ -121,7 +121,7 @@ class ProductList extends React.Component {
    
     console.log(formData);
 
-    Axios.post('http://localhost:5000/api/products', formData)
+    Axios.post(process.env.REACT_APP_API + '/admin/products', formData)
     .then((response) => {
         console.log("Successfully Added New Category!");
         this.setState({addOpen: false});
@@ -160,7 +160,7 @@ class ProductList extends React.Component {
       formData.append("file", this.state.img_url);
       formData.append("categoryId", this.state.categoryId);
       // {name: this.state.name, price: this.state.price, weight_gram:this.state.weight_gram, description: this.state.description, file: this.state.img_url, categoryId: this.state.categoryId}
-      Axios.patch(`http://localhost:5000/api/products/${this.state.editId}`, formData)
+      Axios.patch(process.env.REACT_APP_API+`/admin/products/${this.state.editId}`, formData)
       .then((response) => {
           alert('Successfully Updated Product');
           this.setState({editOpen: false});
@@ -200,7 +200,7 @@ class ProductList extends React.Component {
   }
 
   getCategories = () => {
-    Axios.get('http://localhost:5000/api/categories')
+    Axios.get(process.env.REACT_APP_API+'/admin/categories')
     .then((response) => {
         this.setState({dbCategory: response.data})
     })
@@ -290,51 +290,63 @@ class ProductList extends React.Component {
                   <br/>
                   <Stack spacing='20px'>
                     
-                    <TextField fullWidth label="Product Name" id="name"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.name}
-                      size='small'
-                      name="name"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Product Name" id="name"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.name}
+                        size='small'
+                        name="name"
+                        required
+                      />
+                    </FormControl>
 
-                   
-                    <TextField fullWidth label="Price" id="price"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.price}
-                      size='small'
-                      name="price"
-                    />
+                    <FormControl>
+                        <TextField fullWidth label="Price" id="price"
+                          onChange ={(event) => this.handleUserInput(event)}
+                          value = {this.state.price}
+                          size='small'
+                          name="price"
+                          required
+                        />
+                    </FormControl>
                     
-                    
-                    <TextField fullWidth label="Weight(Gram)" id="weight_gram"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.weight_gram}
-                      size='small'
-                      name="weight_gram"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Weight(Gram)" id="weight_gram"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.weight_gram}
+                        size='small'
+                        name="weight_gram"
+                        required
+                      />
+                    </FormControl>
 
-                   
-                    <TextField fullWidth label="Description" id="description"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.description}
-                      size='small'
-                      name="description"
-                    />
-                    
-                    <InputLabel id="category-select">Category</InputLabel>
-                    <Select
-                      labelId="category-select"
-                      id="categoryId"
-                      value={this.state.categoryId}
-                      label="Category"
-                      onChange={(event) => this.handleUserInput(event)}
-                      name="categoryId"
-                      size='small'
-                    >
-                       {this.printCategory()}
-                    </Select>
+                   <FormControl>
+                      <TextField fullWidth label="Description" id="description"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.description}
+                        size='small'
+                        name="description"
+                        required
+                      />
+                   </FormControl>
 
-                    <InputLabel id="category-select">Upload Image</InputLabel>
+                    <FormControl>
+                      <InputLabel id="category-select">Category</InputLabel>
+                      <Select
+                        labelId="category-select"
+                        id="categoryId"
+                        value={this.state.categoryId}
+                        label="Category"
+                        onChange={(event) => this.handleUserInput(event)}
+                        name="categoryId"
+                        size= 'medium'
+                        required
+                      >
+                        {this.printCategory()}
+                      </Select>
+                    </FormControl>
+
+                    <InputLabel id="category-select" required>Upload Image</InputLabel>
                     <Box color='neutral' display='flex' flex-direction='row' justifyContent='center' alignItems='center' width='100%' height='100px' border='1px dotted #508dcd'>
                       <label htmlFor="productMenu">
                         <Input accept="image/*" id="productMenu" multiple type="file" onChange={(e) => this.setState({img_url: e.target.files[0]})}/>
@@ -365,49 +377,56 @@ class ProductList extends React.Component {
                   <br/>
                   <Stack spacing='20px'>
                     
-                    <TextField fullWidth label="Product Name" id="name"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.name}
-                      size='small'
-                      name="name"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Product Name" id="name"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.name}
+                        size='small'
+                        name="name"
+                      />
+                    </FormControl>
 
-                   
-                    <TextField fullWidth label="Price" id="price"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.price}
-                      size='small'
-                      name="price"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Price" id="price"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.price}
+                        size='small'
+                        name="price"
+                      />
+                    </FormControl>
                     
-                    
-                    <TextField fullWidth label="Weight(Gram)" id="weight_gram"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.weight_gram}
-                      size='small'
-                      name="weight_gram"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Weight(Gram)" id="weight_gram"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.weight_gram}
+                        size='small'
+                        name="weight_gram"
+                      />
+                    </FormControl>
 
-                   
-                    <TextField fullWidth label="Description" id="description"
-                      onChange ={(event) => this.handleUserInput(event)}
-                      value = {this.state.description}
-                      size='small'
-                      name="description"
-                    />
+                    <FormControl>
+                      <TextField fullWidth label="Description" id="description"
+                        onChange ={(event) => this.handleUserInput(event)}
+                        value = {this.state.description}
+                        size='small'
+                        name="description"
+                      />
+                    </FormControl>
                     
-                    <InputLabel id="category-select">Category</InputLabel>
-                    <Select
-                      labelId="category-select"
-                      id="categoryId"
-                      value={this.state.categoryId}
-                      label="Category"
-                      onChange={(event) => this.handleUserInput(event)}
-                      name="categoryId"
-                      size='small'
-                    >
-                       {this.printCategory()}
-                    </Select>
+                    <FormControl>
+                      <InputLabel id="category-select">Category</InputLabel>
+                      <Select
+                        labelId="category-select"
+                        id="categoryId"
+                        value={this.state.categoryId}
+                        label="Category"
+                        onChange={(event) => this.handleUserInput(event)}
+                        name="categoryId"
+                        size='medium'
+                      >
+                        {this.printCategory()}
+                      </Select>
+                    </FormControl>
 
                     <InputLabel id="category-select">Upload Image</InputLabel>
                     <Box color='neutral' display='flex' flex-direction='row' justifyContent='center' alignItems='center' width='100%' height='100px' border='1px dotted #508dcd'>
@@ -427,7 +446,7 @@ class ProductList extends React.Component {
             </Box>
           </Modal>
         </Stack>
-        <div style={{ height: 400, width: '100%' }}>
+        <div style={{ height: '700px', width: '100%' }}>
           <Confirmation isOpen={this.state.alertDelete} title="Confirmation Delete" onCancel={this.onButtonCancelDelete} onConfirm={this.onButtonConfirmDelete}/>
           <DataGrid rows={this.state.dbProduct} columns={columns} components={{ Toolbar: GridToolbar }} />
         </div>

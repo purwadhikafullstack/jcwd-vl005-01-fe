@@ -1,0 +1,8 @@
+.productlistWrapper {
+    display: flex;
+  }
+  .productList {
+    flex: 4;
+    height: 100vh;
+  }
+  
