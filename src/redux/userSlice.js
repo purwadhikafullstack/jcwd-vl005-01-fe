@@ -6,7 +6,7 @@ const userSlice = createSlice({
     user_id: "",
     username: "",
     email: "",
-    status: ""
+    status: "inactive"
   },
   reducers: {
     login: (state, action) => {

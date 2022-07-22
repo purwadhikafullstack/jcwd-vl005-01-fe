@@ -80,7 +80,7 @@ const App = () => {
 
         <Route
           path="/admin"
-          // element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
+          element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}
         />
         <Route
           path="/admin/verify-account/:token"
@@ -88,9 +88,9 @@ const App = () => {
         />
         <Route
           path="/admin/forget-password"
-          // element={
-          //   username ? <Navigate to="/admin/home" /> : <AdminForgetPassword />
-          // }
+          element={
+            username ? <Navigate to="/admin/home" /> : <AdminForgetPassword />
+          }
         />
         <Route
           path="/admin/reset-password/:token"

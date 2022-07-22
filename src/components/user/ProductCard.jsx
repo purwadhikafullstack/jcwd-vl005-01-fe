@@ -12,12 +12,12 @@ export default function ProductCard({productData}) {
         <CardMedia
           component="img"
           height="240"
-          image={productData.picture}
-          alt={`picture of ${productData.product_name}`}
+          image={productData.img_url}
+          alt={`picture of ${productData.name}`}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {productData.product_name}
+            {productData.name}
           </Typography>
           <Typography variant="h6" color="text.secondary">
             Rp {parseInt(productData.price).toLocaleString('de')}

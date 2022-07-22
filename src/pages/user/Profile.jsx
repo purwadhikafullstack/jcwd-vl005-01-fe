@@ -4,15 +4,17 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import {
-  Box
+  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField
 } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Announcement from "../../components/user/Announcement";
 import Navbar from "../../components/user/Navbar";
 import ResendVerif from "../../components/user/ResendVerif";
+import EditAddress from "../../components/user/EditAddress";
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 86vh;
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
       rgba(255, 255, 255, 0.5)
@@ -44,12 +46,12 @@ const Form = styled.form`
   flex-wrap: wrap;
 `;
 
-const Input = styled.input`
-  flex: 1;
-  width: 80%;
-  margin: 20px 10px 0px 0px;
-  padding: 10px;
-`;
+// const Input = styled.input`
+//   flex: 1;
+//   width: 80%;
+//   margin: 20px 10px 0px 0px;
+//   padding: 10px;
+// `;
 
 const Button = styled.button`
   width: 40%;
@@ -74,20 +76,33 @@ export default function ProfileUser () {
     <Navbar />
     <Container>
       {isActive === "active" ?
-      <Box width={1200} display="flex">
-        <Wrapper>
-          <Title>Edit Address</Title>
-          <Form>
-            <Input placeholder="label" />
-            <Input placeholder="address" />
-            <Input placeholder="city" />
-            <Input placeholder="province" />
-            <Input placeholder="postal" />
-            <Button >Add Address</Button>
-          </Form>
-        </Wrapper>
+      <Box width={1200} display="flex" >
+        <EditAddress/>
         <Wrapper>
           <Title>Transaction History</Title>
+          <Box 
+            height={350} 
+            border={1} 
+            display="flex" 
+            padding={2}>
+            <Box display="flex" flexDirection="column">
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="transaction-history"
+                >
+                  <Typography>11-05-2020 / B5743</Typography>
+                  <Typography marginLeft={25}>Status : Pending</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography> 1. shoes</Typography>
+                  <Typography> 2. jacket</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+            {/* <Box color="red">No Transaction Has Been Made</Box> */}
+          </Box>
         </Wrapper>
       </Box> 
       :

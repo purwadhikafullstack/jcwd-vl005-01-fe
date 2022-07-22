@@ -81,7 +81,6 @@ const Products = () => {
 
   return (
     <Box className="position-relative">
-      {/* <Title>Men</Title> */}
       <Container className="mb-5">
         {currentPosts?.map((product, index) => (
           <Product productData={product} key={index} />
