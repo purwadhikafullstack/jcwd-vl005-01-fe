@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, IconButton, TextField } from "@mui/material";
+import { Button, IconButton, Stack, TextField } from "@mui/material";
 import styled from "styled-components";
 import {  TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,10 +19,12 @@ export default function RowCategory({item, index, onDelete, onEdit}) {
     return (
         <TableRow key={item.categoryId}>
             <TableCell>{index+1}</TableCell>
-            <TableCell>{item.categoryName}</TableCell>
-            <TableCell>
-                <ActionBtn onClick={onDelete}><DeleteIcon sx={{color: '#008080'}}/></ActionBtn>
-                <ActionBtn><EditIcon sx={{color: '#008080'}} onClick={onEdit}/></ActionBtn>
+            <TableCell >{item.categoryName}</TableCell>
+            <TableCell align="center">
+                <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button onClick={onDelete} variant="contained" color="error" size="small"><DeleteIcon/></Button>
+                    <Button variant="contained" color="warning" onClick={onEdit} size="small"><EditIcon/></Button>
+                </Stack>
             </TableCell>
         </TableRow>
     )
@@ -33,11 +35,13 @@ export function RowCategoryEdit({item, onCancel,handleInputChange, saveEdit}){
         <TableRow key={item.categoryId}>
             <TableCell>#</TableCell>
             <TableCell>
-                <TextField fullWidth label="Category Name" id="categoryName" defaultValue={item.categoryName} onChange={handleInputChange}/>
+                <TextField size="small" fullWidth label="Category Name" id="categoryName" defaultValue={item.categoryName} onChange={handleInputChange}/>
             </TableCell>
             <TableCell>
-                <IconButton color="success" variant="contained" onClick={saveEdit}><DoneIcon/></IconButton>
-                <IconButton color="error" variant="contained" onClick={onCancel}><CloseIcon/></IconButton>
+                <Stack direction="row" spacing={2} justifyContent="center">
+                    <IconButton color="success" variant="contained" onClick={saveEdit}><DoneIcon/></IconButton>
+                    <IconButton color="error" variant="contained" onClick={onCancel}><CloseIcon/></IconButton>
+                </Stack>
             </TableCell>
         </TableRow>
     )
