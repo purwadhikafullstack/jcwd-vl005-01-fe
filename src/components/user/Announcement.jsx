@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 
 const Announcement = () => {
-  return <Container>Grand Opening Promo! Free Shipping on All Order</Container>;
+  return <Container>Grand Opening Promo! Flat Shipping Rate With No Minimum Order</Container>;
 };
 
 export default Announcement;

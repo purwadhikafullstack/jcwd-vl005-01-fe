@@ -5,23 +5,23 @@ import jacket from "./assets/jacket.png";
 export const sliderItems = [
   {
     id: 1,
-    img: "https://img.freepik.com/premium-photo/portrait-beautiful-young-female-applying-perfume-isolated-white-background_650366-1486.jpg?w=2000",
+    img: "https://images.unsplash.com/flagged/photo-1553802922-e345434156e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80",
     title: "STAND OUT AMONG OTHERS",
-    desc: "SHOP HIGH QUALITY PARFUME TO SHOW YOUR PRESENCE AND GIVE AMAZING FIRST IMPRESSION.",
-    bg: "EFF1F5",
+    desc: "WE PICK THE BEST OUTFIT FOR YOUR STYLE.",
+    bg: "C2C4C6",
   },
   {
     id: 2,
-    img: "https://static.toiimg.com/photo/msid-56352286/56352286.jpg?4702264",
-    title: "FEMALE COLLECTION",
-    desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
-    bg: "EBDADE",
+    img: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    title: "SLEEK AND FRESH COLLECTION",
+    desc: "START YOUR OUTFIT COLLECTION.",
+    bg: "E8E9EB",
   },
   {
     id: 3,
-    img: "https://img.fragrancex.com/images/articles/how-to-apply-cologne/how-to-apply-cologne-1.jpg",
-    title: "MALE COLLECTION",
-    desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
+    img: "https://images.unsplash.com/photo-1545273072-c541efad6ba6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+    title: "FUNKY STYLE ON THE GO",
+    desc: "STAY YOUNG AND SHOW YOUR INNER PLAYFULL.",
     bg: "EED5AE",
   },
 ];
@@ -34,8 +34,8 @@ export const categories = [
   },
   {
     id: 2,
-    img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    title: "LOUNGEWEAR LOVE",
+    img: "https://images.unsplash.com/photo-1579310962131-aa21f240d986?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+    title: "DENIM FEVER",
   },
   {
     id: 3,

@@ -5,7 +5,9 @@ import Axios from "axios";
 import {
   Box, Typography, Input, TextField
 } from "@mui/material";
+import Confirmation from './Confirmation'
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Wrapper = styled.div`
   width: 60%;
@@ -37,7 +39,16 @@ const Button = styled.button`
 
 export default function EditAddress () {
     const [userData, setUserData] = useState([]);
-    const userId = useSelector((state) => state.user.status)
+    const [confirm, setConfirm] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const refLabel = useRef('')
+    const refAddress = useRef('')
+    const refCity = useRef('')
+    const refProvince = useRef('')
+    const refPostal = useRef('')
+
+
+    const userId = useSelector((state) => state.user.user_id)
     
     useEffect(() => {
         Axios.get(process.env.REACT_APP_API + `/user/${userId}`)
@@ -50,37 +61,77 @@ export default function EditAddress () {
         });
     }, []);
 
+    const onButtonSaveAddress = (e) => {
+        e.preventDefault()
+        setConfirm(true)
+        setLoading(true)
+    }
+
+    const onButtonCancelEdit = () => {
+        setConfirm(false)
+        setLoading(false)
+    }
+
+    const onButtonConfirmSaveAddress = () => {
+        setConfirm(false)
+        const newaddress = {
+          address : refAddress.current.value,
+          city : refCity.current.value,
+          province : refProvince.current.value,
+          postal : refPostal.current.value,
+          label : refLabel.current.value 
+        }
+
+        Axios.patch(process.env.REACT_APP_API+`/user/${userId}`, newaddress)
+        .then((res) => {
+          console.log("respond :", res.data)
+            setLoading(false)
+            toast.success('New Address has been saved')
+            })
+        .catch((error) => {
+            setLoading(false)
+            toast.error(error.response.data)
+            console.log(error)
+        })
+    }
+
     return (
         <Wrapper>
-          <Title>Edit Address {userId}</Title>
+          <Confirmation 
+            isConfirm={confirm} 
+            title="Change Address Confirmation" 
+            onCancel={onButtonCancelEdit} 
+            onConfirm={onButtonConfirmSaveAddress}
+          />
+          <Title>Edit Address</Title>
           {userData.map(user => (
           <Form key={user.id}>
             <TextField hiddenLabel 
                 variant="filled" 
                 placeholder="Insert Label"
-                // ref={refLabel}
-                value={user.label} />
+                inputRef={refLabel}
+                defaultValue={user.label} />
             <TextField hiddenLabel 
                 variant="filled" 
                 placeholder="Insert Address"
-                // ref={refAddress} 
-                value={user.address}/>
+                inputRef={refAddress} 
+                defaultValue={user.address}/>
             <TextField hiddenLabel 
                 variant="filled" 
                 placeholder="Insert City" 
-                // ref={refCity}
-                value={user.city}/>
+                inputRef={refCity}
+                defaultValue={user.city}/>
             <TextField hiddenLabel 
                 variant="filled" 
                 placeholder="Insert Province" 
-                // ref={refProvince}
-                value={user.province}/>
+                inputRef={refProvince}
+                defaultValue={user.province}/>
             <TextField hiddenLabel 
                 variant="filled" 
                 placeholder="Insert Postal Code"
-                // ref={refPostal}
-                value={user.postal} />
-            <Button >Save Address</Button>
+                inputRef={refPostal}
+                defaultValue={user.postal} />
+            <Button onClick={onButtonSaveAddress}>Save Address</Button>
           </Form>))}
         </Wrapper>
     )

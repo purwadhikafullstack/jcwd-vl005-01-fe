@@ -2,9 +2,10 @@ import styled from "styled-components";
 import React, { useRef, useState } from 'react'
 import { useDispatch } from "react-redux";
 import Axios from 'axios'
-import { useNavigate, Navigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { CircularProgress, Button } from "@mui/material";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+
 
 import { mobile } from "../../responsive";
 
@@ -63,7 +64,7 @@ const Input = styled.input`
 //   margin-bottom: 10px;
 // `;
 
-const Link = styled.a`
+const StyledLink = styled(Link)`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -112,7 +113,7 @@ export default function FPUser () {
               size="large"
               disabled={loading}
             >{loading ? <CircularProgress size={30} color="inherit"/>: "SEND EMAIL"}</Button>
-            <Link href="http://localhost:3000/login">BACK TO LOGIN</Link>
+            <StyledLink to="/login">BACK TO LOGIN</StyledLink>
           </Formrow>
         </Form>
       </Wrapper>

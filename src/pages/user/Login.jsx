@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useRef, useState } from 'react'
 import { useDispatch } from "react-redux";
 import Axios from 'axios'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { toast } from "react-toastify";
 import { login } from "../../redux/userSlice";
 import {
@@ -69,7 +69,7 @@ const Button = styled.button`
   margin-top: 10px;
 `;
 
-const Link = styled.a`
+const StyledLink = styled(Link)`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
@@ -162,8 +162,8 @@ export default function Login () {
           }}
           />
           <Button onClick={onButtonLogin}>{loading ? <CircularProgress size={30} color="inherit"/>: "PROCEED SIGN IN"}</Button>
-          <Link href="http://localhost:3000/user/forget-pass">RESET PASSWORD?</Link>
-          <Link href="http://localhost:3000/register">CREATE A NEW ACCOUNT</Link>
+          <StyledLink to="/user/forget-pass" >RESET PASSWORD?</StyledLink>
+          <StyledLink to="/register" >CREATE A NEW ACCOUNT</StyledLink>
         </Form>
       </Wrapper>
     </Container>

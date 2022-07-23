@@ -1,6 +1,15 @@
 import React from "react";
-//bootstrap
-import "bootstrap/dist/css/bootstrap.min.css";
+import styled from "styled-components";
+
+const Paging = styled.a`
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 1px solid grey;
+  margin-left: 2px;
+`;
 
 const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   const pageNumbers = [];
@@ -13,23 +22,16 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     e.preventDefault();
     paginate(number);
   };
+
   return (
-    <div className="mt-5" style={{ position: "absolute", bottom: 0 }}>
-      <nav>
-        <ul className="pagination">
-          {pageNumbers.map((number) => (
-            <li className="page-item" key={number}>
-              <a
-                onClick={(e) => handleClick(e, number)}
-                href=""
-                className="page-link"
-              >
-                {number}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+    <div>
+      {pageNumbers.map((number, index) => (
+        <>
+          <Paging onClick={(e) => handleClick(e, number)} href="">
+            {number}
+          </Paging>
+        </>
+      ))}
     </div>
   );
 };

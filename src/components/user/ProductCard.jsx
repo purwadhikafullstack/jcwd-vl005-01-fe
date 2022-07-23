@@ -4,11 +4,16 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Button } from '@mui/material';
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProductCard({productData}) {
+  const Navigate = useNavigate();
+  const clickProductCard = () => {
+        Navigate(`/products/${productData.id}`)
+    }
   return (
     <Card sx={{ width: 345 }}>
-      <CardActionArea>
+      <CardActionArea onClick={clickProductCard}>
         <CardMedia
           component="img"
           height="240"
