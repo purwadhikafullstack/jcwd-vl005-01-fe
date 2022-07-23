@@ -12,7 +12,7 @@ export default function ProductCard({productData}) {
         Navigate(`/products/${productData.id}`)
     }
   return (
-    <Card sx={{ width: 345 }}>
+    <Card sx={{ width: 345, margin: 2 }} >
       <CardActionArea onClick={clickProductCard}>
         <CardMedia
           component="img"

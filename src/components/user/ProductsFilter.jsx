@@ -67,7 +67,7 @@ export default function ProductsFilter() {
   return (
     <Box
       sx={{
-        width: 500,
+        flex: 1,
         height: autocompleteClasses,
         backgroundColor: "rgb(245,251,253)",
         padding: 3,

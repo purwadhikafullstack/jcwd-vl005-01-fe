@@ -9,6 +9,12 @@ const Paging = styled.a`
   border-radius: 2px;
   border: 1px solid grey;
   margin-left: 2px;
+  &:hover {
+    background-color: green;
+  }&:focus {
+    background-color: green;
+    color: white;
+  }
 `;
 
 const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
