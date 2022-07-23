@@ -1,9 +1,9 @@
-import { Badge } from "@mui/material";
-import { Search, ShoppingCartOutlined } from "@mui/icons-material";
+import { Badge, Button, IconButton, Tooltip } from "@mui/material";
+import { Search, ShoppingCartOutlined, Verified, ReportProblem } from "@mui/icons-material";
 import React, { useState } from "react"
 import styled from "styled-components";
 import { mobile } from "../../responsive";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Confirmation from './Confirmation'
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -88,7 +88,9 @@ const StyledLinkUser = styled(Link)`
 const Navbar = () => {
   const [confirm, setConfirm] = useState(false)
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
   const token = localStorage.getItem("token")
+  const isActive = useSelector((state) => state.user.status)
   const userData = useSelector((state) => state.user)
 
   const onButtonLogout = () => {
@@ -102,6 +104,7 @@ const Navbar = () => {
 
         setLoading(false)
         setConfirm(false)
+        navigate("/")
         toast.warning("Logout Success")
     }
     const onButtonCancelLogout = () => {
@@ -121,10 +124,10 @@ const Navbar = () => {
       <Wrapper>
         <Left>
           <Language>EN</Language>
-          <SearchContainer>
+          {/* <SearchContainer>
             <Input placeholder="Search" />
             <Search style={{ color: "gray", fontSize: 16 }} />
-          </SearchContainer>
+          </SearchContainer> */}
         </Left>
         <Center>
           <StyledLink to="/">
@@ -133,20 +136,32 @@ const Navbar = () => {
         </Center>
         <Right>
           { token ? 
-          (<Right>
+          <Right>
+            {isActive === "active" ? 
+            <Tooltip title="Account Verified" placement="bottom-end">
+                <IconButton color="primary">
+                  <Verified fontSize="medium" />
+                </IconButton>
+            </Tooltip>  
+            : <Tooltip title="Account Unverified" placement="bottom-end">
+                <IconButton color="warning">
+                  <ReportProblem fontSize="medium" />
+                </IconButton>
+            </Tooltip>
+            }  
             <StyledLinkUser to="/user/profile">Hi, {userData.username}</StyledLinkUser>
-          <button onClick={onButtonLogout}>
-            LOGOUT
-          </button>
-          </Right>)
-          : (<Right>
-          <StyledLink to="/register">
-            <MenuItem>REGISTER</MenuItem>
-          </StyledLink>
-          <StyledLink to="/login">
-            <MenuItem>SIGN IN</MenuItem>
-          </StyledLink>
-          </Right>)
+            <button onClick={onButtonLogout}>
+              LOGOUT
+            </button>
+          </Right>
+          : <Right>
+            <StyledLink to="/register">
+              <MenuItem>REGISTER</MenuItem>
+            </StyledLink>
+            <StyledLink to="/login">
+              <MenuItem>SIGN IN</MenuItem>
+            </StyledLink>
+          </Right>
           }
           <StyledLink to="/cart">
             <MenuItem>

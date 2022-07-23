@@ -5,6 +5,11 @@ import Footer from "../../components/user/Footer";
 import Navbar from "../../components/user/Navbar";
 import Newsletter from "../../components/user/Newsletter";
 import { mobile } from "../../responsive";
+import Axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+
 
 const Container = styled.div``;
 
@@ -32,6 +37,9 @@ const InfoContainer = styled.div`
 `;
 
 const Title = styled.h1`
+  font-weight: 200;
+`;
+const TitleCat = styled.h3`
   font-weight: 200;
 `;
 
@@ -90,26 +98,38 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const [productData, setProductData] = useState([]);
+  const params = useParams()
+
+  useEffect(() => {
+    Axios.get(process.env.REACT_APP_API + `/products/${params.id}`)
+      .then((res) => {
+        setProductData(() => res.data);
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <Container>
       <Navbar />
       <Announcement />
-      <Wrapper>
+      {productData.map(product => (
+      <Wrapper key={product.id}>
         <ImgContainer>
-          <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
+          <Image src={product.img_url} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Denim Jumpsuit</Title>
+          <TitleCat>{product.categoryName}</TitleCat>
+          <Title>{product.name}</Title>
           <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
+            {product.description}
           </Desc>
           <ContainerP>
-            <Price>Rp 1.200.000</Price>
-            <Price>100 ml</Price>
+            <Price>Rp {parseInt(product.price).toLocaleString('de')}</Price>
+            <Price>{product.weight_gram} gram</Price>
           </ContainerP>
           <AddContainer>
             <AmountContainer>
@@ -120,7 +140,7 @@ const Product = () => {
             <Button>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
-      </Wrapper>
+      </Wrapper>))}
       <Newsletter />
       <Footer />
     </Container>

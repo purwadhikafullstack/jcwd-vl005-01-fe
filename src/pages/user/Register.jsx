@@ -5,6 +5,14 @@ import { useDispatch } from "react-redux";
 import Axios from 'axios'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { toast } from "react-toastify";
+import {
+  IconButton,
+  InputAdornment,
+  TextField,
+  CircularProgress,
+  Button
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Container = styled.div`
   width: 100vw;
@@ -50,24 +58,34 @@ const Agreement = styled.span`
   margin: 20px 0px;
 `;
 
-const Button = styled.button`
-  width: 40%;
-  border: none;
-  padding: 15px 20px;
-  background-color: teal;
-  color: white;
-  cursor: pointer;
-`;
+// const Button = styled.button`
+//   width: 40%;
+//   border: none;
+//   padding: 15px 20px;
+//   background-color: teal;
+//   color: white;
+//   cursor: pointer;
+//   disabled
+// `;
 
 const Register = () => {
   const usern = useRef("")
   const email = useRef("")
   const passw = useRef("")
   const cpass = useRef("")
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const showPassword = () => {
+    if (!visible) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
+  
   const onButtonRegis = (e) => {
     e.preventDefault()
 
@@ -90,7 +108,7 @@ const Register = () => {
       
       toast.success("Registration Successfull")
 
-      navigate('/user/regisdone')
+      navigate('/login')
 
     }) 
     .catch((error) => {
@@ -109,15 +127,65 @@ const Register = () => {
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
         <Form>
-          <Input ref={usern} placeholder="username" />
-          <Input ref={email} placeholder="email" />
-          <Input ref={passw} placeholder="password" />
-          <Input ref={cpass} placeholder="confirm password" />
+          {/* <Input ref={usern} placeholder="username" />
+          <Input ref={email} placeholder="email" /> */}
+          {/* <Input ref={passw} placeholder="password" /> */}
+          {/* <Input ref={cpass} placeholder="confirm password" /> */}
+          <TextField
+            id="outlined-basic"
+            label="Username"
+            variant="outlined"
+            inputRef={usern}
+            type="email"
+          />
+          <TextField
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
+            inputRef={email}
+            type="email"
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type={visible ? "text" : "password"}
+            inputRef={passw}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton color="primary" size="large" onClick={showPassword}>
+                    {visible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+          }}
+          />
+          <TextField
+            label="Confirm Password"
+            variant="outlined"
+            type={visible ? "text" : "password"}
+            inputRef={cpass}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton color="primary" size="large" onClick={showPassword}>
+                    {visible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button onClick={onButtonRegis}>CREATE</Button>
+          <Button 
+            variant="contained"
+            color="info"
+            size="large"
+            onClick={onButtonRegis}
+            disabled={loading}
+            >{loading ? <CircularProgress size={30} color="inherit"/>: "CREATE" }</Button>
         </Form>
       </Wrapper>
     </Container>

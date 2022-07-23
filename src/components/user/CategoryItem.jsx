@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mobile } from "../../responsive";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
@@ -39,15 +40,23 @@ const Button = styled.button`
   color: gray;
   cursor: pointer;
   font-weight: 600;
+  &:hover {
+    background-color: coral;
+  }
 `;
 
 const CategoryItem = ({ item }) => {
+  const Navigate = useNavigate();
+
+  const onClick = () => {
+      Navigate(`${item.linkto}`)
+  }
   return (
     <Container>
       <Image src={item.img} />
       <Info>
         <Title>{item.title}</Title>
-        <Button>SHOP NOW</Button>
+        <Button onClick={onClick}>SHOP NOW</Button>
       </Info>
     </Container>
   );
