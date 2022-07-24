@@ -1,6 +1,7 @@
+import Axios from "axios";
+import React, { useEffect, useState } from "react"
 import { Badge, Button, IconButton, Tooltip } from "@mui/material";
 import { Search, ShoppingCartOutlined, Verified, ReportProblem } from "@mui/icons-material";
-import React, { useState } from "react"
 import styled from "styled-components";
 import { mobile } from "../../responsive";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -92,6 +93,22 @@ const Navbar = () => {
   const token = localStorage.getItem("token")
   const isActive = useSelector((state) => state.user.status)
   const userData = useSelector((state) => state.user)
+  const [dbCartList, setDbCartList] = useState([]);
+
+  useEffect(() => {
+    getCartList();
+  })
+
+  const getCartList = () => {
+    Axios.get(process.env.REACT_APP_API+ `/cart/products/${userData.user_id}`)
+    .then((response) =>{
+      setDbCartList(response.data);
+    })
+    .catch((err) =>{
+        console.log(err);
+        alert(err);
+    })
+  }
 
   const onButtonLogout = () => {
     setConfirm(true)
@@ -153,23 +170,24 @@ const Navbar = () => {
             <button onClick={onButtonLogout}>
               LOGOUT
             </button>
+            <StyledLink to="/cart">
+              <MenuItem>
+                <Badge color="primary" badgeContent={dbCartList.length}>
+                  <ShoppingCartOutlined />
+                </Badge>
+              </MenuItem>
+            </StyledLink>
           </Right>
-          : <Right>
-            <StyledLink to="/register">
-              <MenuItem>REGISTER</MenuItem>
-            </StyledLink>
-            <StyledLink to="/login">
-              <MenuItem>SIGN IN</MenuItem>
-            </StyledLink>
+          : 
+          <Right>
+          <StyledLink to="/register">
+            <MenuItem>REGISTER</MenuItem>
+          </StyledLink>
+          <StyledLink to="/login">
+            <MenuItem>SIGN IN</MenuItem>
+          </StyledLink>
           </Right>
           }
-          <StyledLink to="/cart">
-            <MenuItem>
-              <Badge badgeContent={4} color="primary">
-                <ShoppingCartOutlined />
-              </Badge>
-            </MenuItem>
-          </StyledLink>
         </Right>
       </Wrapper>
     </Container>
