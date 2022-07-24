@@ -64,7 +64,7 @@ export default function UserList() {
 
   const columns = [
     {
-      field: "user_id",
+      field: "id",
       headerName: "ID",
       width: 150,
       headerAlign: "center",
@@ -109,7 +109,7 @@ export default function UserList() {
         return (
           <>
             <Link
-              to={"/admin/user/" + params.row.user_id}
+              to={"/admin/user/" + params.row.id}
               style={{ textDecoration: "none", fontSize: "10px" }}
             >
               <Button
@@ -132,9 +132,7 @@ export default function UserList() {
                 height: 40,
                 textTransform: "capitalize",
               }}
-              onClick={() =>
-                onBtnDeactivate(params.row.user_id, params.row.status)
-              }
+              onClick={() => onBtnDeactivate(params.row.id, params.row.status)}
             >
               {params.row.status === "active" ? "Deactivate" : "Activate"}
             </Button>
@@ -158,7 +156,7 @@ export default function UserList() {
             rows={userData}
             disableSelectionOnClick
             columns={columns}
-            getRowId={(row) => row.user_id}
+            getRowId={(row) => row.id}
             pageSize={10}
             rowsPerPageOptions={[5, 10, 20]}
             checkboxSelection

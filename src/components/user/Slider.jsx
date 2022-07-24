@@ -3,6 +3,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { sliderItems } from "../../data";
 import { mobile } from "../../responsive";
+import { useNavigate, useParams } from "react-router-dom";
+
 
 const Container = styled.div`
   width: 100%;
@@ -77,9 +79,14 @@ const Button = styled.button`
   font-size: 20px;
   background-color: transparent;
   cursor: pointer;
+    &:hover {
+    background-color: #1976D2;
+    color: white
+  }
 `;
 
 const Slider = () => {
+  const Navigate = useNavigate();
   const [slideIndex, setSlideIndex] = useState(0);
   const handleClick = (direction) => {
     if (direction === "left") {
@@ -88,6 +95,10 @@ const Slider = () => {
       setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
     }
   };
+
+  const onClickShowProducts = () => {
+    Navigate('/products')
+  }
 
   return (
     <Container>
@@ -103,7 +114,7 @@ const Slider = () => {
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-              <Button>SHOW NOW</Button>
+              <Button onClick={onClickShowProducts}>SHOW NOW</Button>
             </InfoContainer>
           </Slide>
         ))}

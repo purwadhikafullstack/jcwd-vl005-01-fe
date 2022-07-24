@@ -81,7 +81,7 @@ const TransactionList = () => {
       align: "center",
     },
     {
-      field: "user_id",
+      field: "id",
       headerName: "User ID",
       width: 200,
       headerAlign: "center",

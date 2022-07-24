@@ -1,12 +1,22 @@
 import styled from "styled-components";
 import { mobile } from "../../responsive";
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, Navigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
+import {
+  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField
+} from "@mui/material";
+import { toast } from "react-toastify";
+import Axios from "axios";
 import Announcement from "../../components/user/Announcement";
 import Navbar from "../../components/user/Navbar";
+import ResendVerif from "../../components/user/ResendVerif";
+import EditAddress from "../../components/user/EditAddress";
+import TransactionHistory from "../../components/user/TransactionHistory";
 
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 86vh;
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
       rgba(255, 255, 255, 0.5)
@@ -21,7 +31,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 80%;
+  width: 60%;
   padding: 20px;
   background-color: white;
   ${mobile({ width: "75%" })}
@@ -34,14 +44,16 @@ const Title = styled.h1`
 
 const Form = styled.form`
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
 `;
 
-const Input = styled.input`
-  flex: 1;
-  margin: 20px 10px 0px 0px;
-  padding: 10px;
-`;
+// const Input = styled.input`
+//   flex: 1;
+//   width: 80%;
+//   margin: 20px 10px 0px 0px;
+//   padding: 10px;
+// `;
 
 const Button = styled.button`
   width: 40%;
@@ -54,35 +66,37 @@ const Button = styled.button`
 `;
 
 export default function ProfileUser () {
-    const [isActive, setisActive] = useState(false)
+    const isActive = useSelector((state) => state.user.status)
 
+    // protection
+    const token = localStorage.getItem('token')
+    if (!token) return <Navigate to="/"/>
+
+    const test = (e) => {
+      e.preventDefault()
+
+      Axios.get(process.env.REACT_APP_API+'/user/test')
+        .then((res) => {
+            console.log("respond :", res.data)
+        })
+        .catch((error) => {
+            toast.error(error.response.data)
+            console.log(error)
+        })
+    }
 
   return (
     <div>
     <Announcement />
     <Navbar />
     <Container>
-      {isActive ? 
-      <Wrapper>
-        <Title>Edit Address</Title>
-        <Form>
-          <Input placeholder="label" />
-          <Input placeholder="address" />
-          <Input placeholder="city" />
-          <Input placeholder="province" />
-          <Input placeholder="postal" />
-          <Button >Add Address</Button>
-        </Form>
-      </Wrapper>
+      {isActive === "active" ?
+      <Box width={1200} display="flex" >
+        <EditAddress/>
+        <TransactionHistory/>
+      </Box> 
       :
-      <Wrapper>
-        <Title>Account Not Verified</Title>
-        <p>please check your email to proceed verification process or input your email below to get new link</p>
-        <Form>
-          <Input placeholder="email"/>
-          <Button >Send New Link</Button>  
-        </Form>
-      </Wrapper>
+      <ResendVerif/>
     }
     </Container>
     </div>    

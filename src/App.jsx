@@ -2,8 +2,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/adminSlice";
+import { login as loginUser } from "./redux/userSlice";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
+
 
 // Import Pages for the User side
 import Product from "./pages/user/Product";
@@ -44,7 +46,12 @@ import Reports from "./pages/admin/Reports/Reports";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    const Usertoken = localStorage.getItem("token");
     const adminToken = localStorage.getItem("adminToken");
+    if (Usertoken) {
+      const user = jwt_decode(Usertoken);
+      dispatch(loginUser(user));
+    }
     if (adminToken) {
       const user = jwt_decode(adminToken);
       dispatch(login(user));
@@ -69,7 +76,7 @@ const App = () => {
         <Route path="/user/reset-pass/:token" element={<RPUser />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/regisdone" element={<RegisDone />} />
-        <Route path="/verified" element={<VerifPage />} />
+        <Route path="/verified/:token" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
         <Route path="/check-out" element={<CheckOut/>} />
 

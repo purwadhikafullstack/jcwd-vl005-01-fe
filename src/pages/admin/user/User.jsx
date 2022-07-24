@@ -95,7 +95,7 @@ export default function User() {
                 <div className="userShowInfo">
                   <Key className="userShowIcon" />
                   <span className="userShowInfoTitle"></span>
-                  {userObj.user_id}
+                  {userObj.id}
                 </div>
               </Box>
               <Box flex={3} sx={{ boxShadow: 2, padding: "10px" }}>
