@@ -5,11 +5,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import {
-  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField
+  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField, Button
 } from "@mui/material";
 import { toast } from "react-toastify";
 import Axios from "axios";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AdfScannerIcon from '@mui/icons-material/AdfScanner';
 
 const Container = styled.div`
   width: 100vw;
@@ -40,6 +41,7 @@ const Title = styled.h1`
 `;
 
 export default function TransactionHistory () {
+    const Navigate = useNavigate();
     const [invoice, setInvoiceData] = useState([]);
     const userId = useSelector((state) => state.user.user_id)
     
@@ -54,10 +56,24 @@ export default function TransactionHistory () {
         });
     }, []);
 
+    // const click = () => {
+    //     Navigate(`/invoice/${tcode}`)
+    // }
+    // const getInvoicePdf = () => {
+
+    //   Axios.get(process.env.REACT_APP_API+'/invoice/test')
+    //     .then((res) => {
+    //         console.log("respond :", res.data)
+    //     })
+    //     .catch((error) => {
+    //         toast.error(error.response.data)
+    //         console.log(error)
+    //     })
+    // }
+
     return (
         <Wrapper>
           <Title>Transaction History</Title>
-          {/* <Button onClick={test}/> */}
           <Box 
             height={350} 
             border={1} 
@@ -77,7 +93,10 @@ export default function TransactionHistory () {
                   <Typography textTransform="capitalize" marginLeft={22}>Status : {invoice.status}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography> &bull; ({invoice.qty}) {invoice.name}</Typography>
+                  <Typography marginBottom={2}> &bull; ({invoice.qty}) {invoice.name}</Typography>
+                  {invoice.status === "Approved" ?  
+                  <Button onClick={()=>window.open(`/invoice/${invoice.tcode}`,'_blank')}>See Full Invoice <AdfScannerIcon/></Button> : null }
+                   {/* <Button onClick={click}>See Full Invoice <AdfScannerIcon/></Button> : null } */}
                 </AccordionDetails>
               </Accordion>
               ))}
