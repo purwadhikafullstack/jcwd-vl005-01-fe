@@ -6,20 +6,20 @@ const userSlice = createSlice({
     user_id: "",
     username: "",
     email: "",
-    is_active: ""
+    status: "inactive"
   },
   reducers: {
     login: (state, action) => {
       state.user_id = action.payload.id;
       state.username = action.payload.username;
       state.email = action.payload.email;
-      state.is_active = action.payload.is_active;
+      state.status = action.payload.status;
     },
     logout: (state) => {
       state.user_id = "";
       state.username = "";
       state.email = "";
-      state.is_active = "";
+      state.status = "";
     },
   },
 });

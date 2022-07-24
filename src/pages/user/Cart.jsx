@@ -1,9 +1,16 @@
-import { Add, Remove } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 import styled from "styled-components";
 import Announcement from "../../components/user/Announcement";
 import Footer from "../../components/user/Footer";
 import Navbar from "../../components/user/Navbar";
 import { mobile } from "../../responsive";
+import CartList from "../../components/user/CardProductList";
+import Confirmation from "../../components/admin/alert/Confirmation";
+import {  connect, useSelector } from "react-redux"
+import { FormControl, MenuItem, Select } from "@mui/material";
+import { Link } from "react-router-dom";
+
 
 const Container = styled.div``;
 
@@ -53,73 +60,6 @@ const Info = styled.div`
   flex: 3;
 `;
 
-const Product = styled.div`
-  display: flex;
-  justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
-`;
-
-const ProductDetail = styled.div`
-  flex: 2;
-  display: flex;
-`;
-
-const Image = styled.img`
-  width: 200px;
-`;
-
-const Details = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-`;
-
-const ProductName = styled.span``;
-
-const ProductId = styled.span``;
-
-const ProductColor = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-`;
-
-const ProductSize = styled.span``;
-
-const PriceDetail = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ProductAmountContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const ProductAmount = styled.div`
-  font-size: 24px;
-  margin: 5px;
-  ${mobile({ margin: "5px 15px" })}
-`;
-
-const ProductPrice = styled.div`
-  font-size: 30px;
-  font-weight: 200;
-  ${mobile({ marginBottom: "20px" })}
-`;
-
-const Hr = styled.hr`
-  background-color: #eee;
-  border: none;
-  height: 1px;
-`;
-
 const Summary = styled.div`
   flex: 1;
   border: 0.5px solid lightgray;
@@ -152,100 +92,191 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
-const Cart = () => {
-  return (
-    <Container>
-      <Navbar />
-      <Announcement />
-      <Wrapper>
-        <Title>YOUR BAG</Title>
-        <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
-          <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
-          </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
-        </Top>
-        <Bottom>
-          <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetail>
-            </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> HAKURA T-SHIRT
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Size:</b> M
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>1</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 20</ProductPrice>
-              </PriceDetail>
-            </Product>
-          </Info>
-          <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
-            </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
-          </Summary>
-        </Bottom>
-      </Wrapper>
-      <Footer />
-    </Container>
-  );
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+class Cart extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+        dbCartList:[],
+        deleteId: '',
+        alertDelete: false,
+        dbSum: [],
+        user: this.props.user,
+        delivery: null,
+    }
+
+  }
+
+  componentDidMount() {
+    this.getCartList();
+    this.getSumTotal();
+  }
+  
+  getCartList = () => {
+    Axios.get(process.env.REACT_APP_API+ `/cart/products/${this.state.user}`)
+    .then((response) =>{
+      this.setState({dbCartList: response.data});
+    })
+    .catch((err) =>{
+        console.log(err);
+        alert(err);
+    })
+  }
+
+  onDeleteConfirmButton = () => {
+    this.setState({alertDelete: false});
+    Axios.delete(process.env.REACT_APP_API+ `/cart/products/${this.state.deleteId}`)
+    .then((response) => {
+      alert('Successfully Deleted!');
+      this.getCartList();
+      this.setState({deleteId: null});
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(err);
+    })
+  }
+
+  onButtonCancelDelete = () => {
+    this.setState({alertDelete: false});
+    this.setState({deleteId: null});
+  }
+  
+  onDeleteButton = (id) => {
+    this.setState({alertDelete: true});
+    this.setState({deleteId: id});
+  }
+
+  addQty = (id,quantity) => {
+    let qty = quantity+1;
+    if(qty == 0 ){
+      alert("Product Qty Cannot be 0");
+    }
+    else{
+      Axios.patch(process.env.REACT_APP_API+ `/cart/products/${id}`, {qty: qty})
+      .then((response) => {
+        console.log("Successfully Added!");
+        this.setState({dbSum: []});
+        this.getCartList();
+
+        this.getSumTotal();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      })
+    }
+  }
+
+  reduceQty = (id,quantity) => {
+    let qty = quantity-1;
+    if(qty == 0 ){
+      alert("Product Qty Cannot be 0");
+    }
+    else{
+      Axios.patch(process.env.REACT_APP_API+ `/cart/products/${id}`, {qty: qty})
+      .then((response) => {
+        console.log("Successfully Reduced!");
+        this.getCartList();
+        this.setState({dbSum: []});
+        this.getSumTotal();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      })
+    }
+  }
+
+  getSumTotal = () => {
+    Axios.get(process.env.REACT_APP_API+ `/cart/total/${this.state.user}`)
+    .then((response) =>{
+      this.setState({dbSum: response.data});
+    })
+    .catch((err) =>{
+      console.log(err);
+      alert(err);
+    })
+  }
+
+  handleUserInput (e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value});
+  }
+
+        
+  render() {
+    let subTotal = 0;
+    const calculateSubTotal = () => {
+      this.state.dbCartList.map((item,index) => {
+        subTotal+= item.qty * item.price;
+      })
+    }
+    return (
+      <Container>
+        <Navbar />
+        <Announcement />
+        <Wrapper>
+          <Title>YOUR BAG</Title>
+          <Top>
+            <TopButton>CONTINUE SHOPPING</TopButton>
+            <TopTexts>
+              <TopText>Shopping Bag({this.state.dbCartList.length})</TopText>
+              <TopText>Your Wishlist (0)</TopText>
+            </TopTexts>
+            <TopButton type="filled"><StyledLink to='/check-out'>CHECKOUT NOW</StyledLink></TopButton>
+          </Top>
+          <Bottom>
+            <Info>
+              {this.state.dbCartList.map((item, index) => {
+                return(
+                  <CartList
+                    item = {item}
+                    onDelete = {() => this.onDeleteButton(item.id)}
+                    onAdd = {() => this.addQty(item.id,item.qty)}
+                    onReduce = {() => this.reduceQty(item.id, item.qty)}
+                  />
+                )
+              })}
+            </Info>
+            <Summary>
+              <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+              <SummaryItem>
+                <SummaryItemText>Subtotal</SummaryItemText>
+                {calculateSubTotal()}
+                <SummaryItemPrice>Rp {subTotal}</SummaryItemPrice>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryItemText>Delivery</SummaryItemText>
+                <SummaryItemPrice>NOT YET CALCULATED</SummaryItemPrice>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryItemText>Tax</SummaryItemText>
+                <SummaryItemPrice>Rp {subTotal*5/100}</SummaryItemPrice>
+              </SummaryItem>
+              <SummaryItem type="total">
+                <SummaryItemText>Total</SummaryItemText>
+                <SummaryItemPrice>Rp {subTotal+=subTotal*5/100}</SummaryItemPrice>
+              </SummaryItem>
+              <Button><StyledLink to='/check-out'>CHECKOUT NOW</StyledLink></Button>
+            </Summary>
+            <Confirmation isOpen= {this.state.alertDelete} title ="Confirmation Delete" onCancel = {this.onButtonCancelDelete} onConfirm = {this.onDeleteConfirmButton}/>
+          </Bottom>
+        </Wrapper>
+        <Footer />
+      </Container>
+    );
+  }
 };
 
-export default Cart;
+const mapStateToProps = state => ({
+  user: state.user.user_id,
+})
+
+
+export default connect(mapStateToProps, null)(Cart);

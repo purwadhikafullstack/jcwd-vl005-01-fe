@@ -33,6 +33,7 @@ import ProtectedRoutes from "./components/admin/ProtectedRoutes";
 import AdminRegister from "./pages/admin/Register/Register";
 import VerifyAccount from "./pages/admin/verifyAccount/VerifyAccount";
 import TransactionList from "./pages/admin/transactionList/TransactionList";
+import CheckOut from "./pages/user/CheckOut";
 
 // Others
 import { ToastContainer } from "react-toastify";
@@ -61,7 +62,7 @@ const App = () => {
         <Route path="/products/:id" element={<Product />} />
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
-        <Route path="/product/:id" element={<Product />} />
+        <Route path="/product/:id" element={ <Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user/forget-pass" element={<FPUser />} />
@@ -70,6 +71,7 @@ const App = () => {
         <Route path="/user/regisdone" element={<RegisDone />} />
         <Route path="/verified" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
+        <Route path="/check-out" element={<CheckOut/>} />
 
         <Route
           path="/admin"

@@ -1,6 +1,7 @@
 import { Badge } from "@mui/material";
+import Axios from "axios";
 import { Search, ShoppingCartOutlined } from "@mui/icons-material";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components";
 import { mobile } from "../../responsive";
 import { Link } from "react-router-dom";
@@ -90,6 +91,22 @@ const Navbar = () => {
   const [loading, setLoading] = useState(false)
   const token = localStorage.getItem("token")
   const userData = useSelector((state) => state.user)
+  const [dbCartList, setDbCartList] = useState([]);
+
+  useEffect(() => {
+    getCartList();
+  })
+
+  const getCartList = () => {
+    Axios.get(process.env.REACT_APP_API+ `/cart/products/${userData.user_id}`)
+    .then((response) =>{
+      setDbCartList(response.data);
+    })
+    .catch((err) =>{
+        console.log(err);
+        alert(err);
+    })
+  }
 
   const onButtonLogout = () => {
     setConfirm(true)
@@ -135,9 +152,16 @@ const Navbar = () => {
           { token ? 
           (<Right>
             <StyledLinkUser to="/user/profile">Hi, {userData.username}</StyledLinkUser>
-          <button onClick={onButtonLogout}>
-            LOGOUT
-          </button>
+            <button onClick={onButtonLogout}>
+              LOGOUT
+            </button>
+            <StyledLink to="/cart">
+              <MenuItem>
+                <Badge color="primary" badgeContent={dbCartList.length}>
+                  <ShoppingCartOutlined />
+                </Badge>
+              </MenuItem>
+            </StyledLink>
           </Right>)
           : (<Right>
           <StyledLink to="/register">
@@ -148,13 +172,6 @@ const Navbar = () => {
           </StyledLink>
           </Right>)
           }
-          <StyledLink to="/cart">
-            <MenuItem>
-              <Badge badgeContent={4} color="primary">
-                <ShoppingCartOutlined />
-              </Badge>
-            </MenuItem>
-          </StyledLink>
         </Right>
       </Wrapper>
     </Container>
