@@ -3,13 +3,16 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Button } from '@mui/material';
+import { CardActionArea, Button, Link } from '@mui/material';
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProductCard({productData}) {
   const Navigate = useNavigate();
   const clickProductCard = () => {
         Navigate(`/products/${productData.id}`)
+    }
+  const onClickButton = () => {
+        Navigate(`/`)
     }
   return (
     <Card sx={{ width: 345, margin: 2 }} >
@@ -20,16 +23,17 @@ export default function ProductCard({productData}) {
           image={productData.img_url}
           alt={`picture of ${productData.name}`}
         />
+      </CardActionArea>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Link underline="hover" onClick={clickProductCard} gutterBottom variant="h5" component="button">
             {productData.name}
-          </Typography>
+          </Link>
           <Typography variant="h6" color="text.secondary">
             Rp {parseInt(productData.price).toLocaleString('de')}
           </Typography>
-          <Button variant='contained'>cart</Button>
+          <Button onClick={onClickButton} variant='contained'>cart</Button>
         </CardContent>
-      </CardActionArea>
+      
     </Card>
   );
 }
