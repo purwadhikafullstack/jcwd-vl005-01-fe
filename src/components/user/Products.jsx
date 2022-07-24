@@ -80,7 +80,7 @@ const Products = () => {
         {currentPosts?.map((product, index) => (
           <Product productData={product} key={index} />
         ))}
-        {currentPosts.length === 0 && <span>data tidak ada</span>}
+        {currentPosts.length === 0 && <span>data tidak ada, kembali ke page sebelumnya</span>}
       </Container>
       <Paginations
         paginate={paginate}

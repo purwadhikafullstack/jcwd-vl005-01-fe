@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 import {
   Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField
 } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { toast } from "react-toastify";
+import Axios from "axios";
 import Announcement from "../../components/user/Announcement";
 import Navbar from "../../components/user/Navbar";
 import ResendVerif from "../../components/user/ResendVerif";
 import EditAddress from "../../components/user/EditAddress";
+import TransactionHistory from "../../components/user/TransactionHistory";
 
 const Container = styled.div`
   width: 100vw;
@@ -70,6 +72,19 @@ export default function ProfileUser () {
     const token = localStorage.getItem('token')
     if (!token) return <Navigate to="/"/>
 
+    const test = (e) => {
+      e.preventDefault()
+
+      Axios.get(process.env.REACT_APP_API+'/user/test')
+        .then((res) => {
+            console.log("respond :", res.data)
+        })
+        .catch((error) => {
+            toast.error(error.response.data)
+            console.log(error)
+        })
+    }
+
   return (
     <div>
     <Announcement />
@@ -78,32 +93,7 @@ export default function ProfileUser () {
       {isActive === "active" ?
       <Box width={1200} display="flex" >
         <EditAddress/>
-        <Wrapper>
-          <Title>Transaction History</Title>
-          <Box 
-            height={350} 
-            border={1} 
-            display="flex" 
-            padding={2}>
-            <Box display="flex" flexDirection="column">
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="transaction-history"
-                >
-                  <Typography>11-05-2020 / B5743</Typography>
-                  <Typography marginLeft={25}>Status : Pending</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography> 1. shoes</Typography>
-                  <Typography> 2. jacket</Typography>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-            {/* <Box color="red">No Transaction Has Been Made</Box> */}
-          </Box>
-        </Wrapper>
+        <TransactionHistory/>
       </Box> 
       :
       <ResendVerif/>

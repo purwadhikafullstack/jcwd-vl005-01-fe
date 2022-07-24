@@ -80,7 +80,8 @@ const Button = styled.button`
   background-color: transparent;
   cursor: pointer;
     &:hover {
-    background-color: coral;
+    background-color: #1976D2;
+    color: white
   }
 `;
 
