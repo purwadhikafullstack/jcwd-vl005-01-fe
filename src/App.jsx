@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
+import Invoice from "./pages/user/Invoice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const App = () => {
         <Route path="/user/regisdone" element={<RegisDone />} />
         <Route path="/verified/:token" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
+        <Route path="/invoice/:invoiceN" element={<Invoice />} />
         <Route path="/check-out" element={<CheckOut/>} />
 
         <Route

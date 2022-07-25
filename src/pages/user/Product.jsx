@@ -132,11 +132,7 @@ const Product = () => {
             <Price>{product.weight_gram} gram</Price>
           </ContainerP>
           <AddContainer>
-            <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
-            </AmountContainer>
+            <Price>Stock : {product.stock}</Price>
             <Button>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>

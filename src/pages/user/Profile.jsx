@@ -72,19 +72,6 @@ export default function ProfileUser () {
     const token = localStorage.getItem('token')
     if (!token) return <Navigate to="/"/>
 
-    const test = (e) => {
-      e.preventDefault()
-
-      Axios.get(process.env.REACT_APP_API+'/user/test')
-        .then((res) => {
-            console.log("respond :", res.data)
-        })
-        .catch((error) => {
-            toast.error(error.response.data)
-            console.log(error)
-        })
-    }
-
   return (
     <div>
     <Announcement />
