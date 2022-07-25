@@ -3,11 +3,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Button, Link } from '@mui/material';
+import { CardActionArea, Button, Link, Box } from '@mui/material';
 import { useNavigate, useParams} from "react-router-dom";
 import Axios from "axios";
 import { useSelector } from 'react-redux';
-
 
 export default function ProductCard({productData}) {
   const Navigate = useNavigate();
@@ -28,6 +27,7 @@ export default function ProductCard({productData}) {
     })
     Navigate(`/cart`)
   }
+
   return (
     <Card sx={{ width: 345, margin: 2 }} >
       <CardActionArea onClick={clickProductCard}>
@@ -42,7 +42,8 @@ export default function ProductCard({productData}) {
           <Link underline="hover" onClick={clickProductCard} gutterBottom variant="h5" component="button">
             {productData.name}
           </Link>
-          <Typography variant="h6" color="text.secondary">
+          <Box display="flex" justifyContent="space-between">
+          <Typography variant="h6" >
             Rp {parseInt(productData.price).toLocaleString('de')}
           </Typography>
           { userData ? 
@@ -59,6 +60,9 @@ export default function ProductCard({productData}) {
             <Button variant='contained' disabled>cart</Button>
           }
           
+          <Typography variant="h6" color="text.secondary">Stock : {productData.stock}</Typography>
+          </Box>
+          <Button onClick={onClickButton} variant='contained'>cart</Button>
         </CardContent>
       
     </Card>

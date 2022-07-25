@@ -150,6 +150,7 @@ const Product = () => {
           </ContainerP>
           <AddContainer>
             <AmountContainer>
+              <Price>Stock : {product.stock}</Price>
               <IconButton onClick={() => {
                 if(qty==0) {
                   alert("Quantity Cannot Be Less Than 0")
