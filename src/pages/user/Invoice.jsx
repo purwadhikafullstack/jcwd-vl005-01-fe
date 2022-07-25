@@ -56,6 +56,7 @@ export default function Invoice () {
                 <Box  flex={4} display="flex" padding={2}>
                     <Box flex={1} backgroundColor="#808E49">
                         <Typography marginTop={20} marginLeft={2} fontWeight="bold" fontSize="50px">INSTORE</Typography>
+                        <Typography marginLeft={2} fontSize="22px">Sent From : {invoice.warehouse_city}, {invoice.warehouse_province}</Typography>
                     </Box>
                     <Box border={1} padding={3} flex={1}>
                         <Button onClick={saveInvoice}><FileDownloadIcon/> Download Invoice</Button>

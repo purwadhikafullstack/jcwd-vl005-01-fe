@@ -97,7 +97,7 @@ const Slider = () => {
   };
 
   const onClickShowProducts = () => {
-    Navigate('/products')
+    Navigate('/products?filter=&category=all&sort=latest')
   }
 
   return (
