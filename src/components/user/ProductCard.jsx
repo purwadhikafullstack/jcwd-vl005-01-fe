@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function ProductCard({productData}) {
   const Navigate = useNavigate();
   const clickProductCard = () => {
-        Navigate(`/products/${productData.product_id}`)
+        Navigate(`/product/${productData.product_id}`)
     }
   const onClickButton = () => {
         Navigate(`/`)
