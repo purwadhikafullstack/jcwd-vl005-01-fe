@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
+import ProtectedRoutesUser from "./components/user/protectedRoutes";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -69,8 +70,7 @@ const App = () => {
         <Route path="/products/:id" element={<Product />} />
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
-        <Route path="/product/:id" element={ <Product />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={ <Product />} />   
         <Route path="/login" element={<Login />} />
         <Route path="/user/forget-pass" element={<FPUser />} />
         <Route path="/user/reset-pass/:token" element={<RPUser />} />
@@ -78,7 +78,11 @@ const App = () => {
         <Route path="/user/regisdone" element={<RegisDone />} />
         <Route path="/verified/:token" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
-        <Route path="/check-out" element={<CheckOut/>} />
+
+        <Route element={<ProtectedRoutesUser/>}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/check-out" element={<CheckOut/>} />
+        </Route>
 
         <Route
           path="/admin"

@@ -4,16 +4,30 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Button, Link } from '@mui/material';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
+import Axios from "axios";
+import { useSelector } from 'react-redux';
+
 
 export default function ProductCard({productData}) {
   const Navigate = useNavigate();
+  const userData = useSelector((state) => state.user.user_id)
+
   const clickProductCard = () => {
         Navigate(`/products/${productData.id}`)
-    }
-  const onClickButton = () => {
-        Navigate(`/`)
-    }
+  }
+  const onClickButton = (product_id, qty) => {
+    let quantity = qty+1;
+    Axios.post(process.env.REACT_APP_API + '/cart/products', {user_id: userData, product_id: product_id, qty:quantity})
+    .then((response) => {
+      alert("Succesfully Add Product To Cart");
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(err);
+    })
+    Navigate(`/cart`)
+  }
   return (
     <Card sx={{ width: 345, margin: 2 }} >
       <CardActionArea onClick={clickProductCard}>
@@ -31,7 +45,20 @@ export default function ProductCard({productData}) {
           <Typography variant="h6" color="text.secondary">
             Rp {parseInt(productData.price).toLocaleString('de')}
           </Typography>
-          <Button onClick={onClickButton} variant='contained'>cart</Button>
+          { userData ? 
+            <Button onClick={() => {
+              if(productData.stock == null || productData.stock == 0){
+                alert("Product Out Of Stock")
+              }
+              else{
+                onClickButton(productData.id, productData.qty)
+              }
+  
+            }} variant='contained'>cart</Button>
+            :
+            <Button variant='contained' disabled>cart</Button>
+          }
+          
         </CardContent>
       
     </Card>
