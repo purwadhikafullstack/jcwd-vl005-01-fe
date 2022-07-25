@@ -43,9 +43,11 @@ export default function ProductCard({productData}) {
             {productData.name}
           </Link>
           <Box display="flex" justifyContent="space-between">
-          <Typography variant="h6" >
-            Rp {parseInt(productData.price).toLocaleString('de')}
-          </Typography>
+            <Typography variant="h6" >
+              Rp {parseInt(productData.price).toLocaleString('de')}
+            </Typography>
+            <Typography variant="h6" color="text.secondary">Stock : {productData.stock}</Typography>
+          </Box>
           { userData ? 
             <Button onClick={() => {
               if(productData.stock == null || productData.stock == 0){
@@ -59,10 +61,6 @@ export default function ProductCard({productData}) {
             :
             <Button variant='contained' disabled>cart</Button>
           }
-          
-          <Typography variant="h6" color="text.secondary">Stock : {productData.stock}</Typography>
-          </Box>
-          <Button onClick={onClickButton} variant='contained'>cart</Button>
         </CardContent>
       
     </Card>
