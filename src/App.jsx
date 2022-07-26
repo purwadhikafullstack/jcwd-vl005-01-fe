@@ -42,6 +42,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResendToken from "./pages/admin/ResendToken/ResendToken";
 import Reports from "./pages/admin/Reports/Reports";
+import ProtectedRoutesUser from "./components/user/protectedRoutes";
 import Invoice from "./pages/user/Invoice";
 
 const App = () => {
@@ -67,8 +68,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductList />} />
-        <Route path="/product/:id" element={ <Product />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/products/:id" element={<Product />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/product/:id" element={ <Product />} />   
         <Route path="/login" element={<Login />} />
         <Route path="/user/forget-pass" element={<FPUser />} />
         <Route path="/user/reset-pass/:token" element={<RPUser />} />
@@ -77,8 +79,12 @@ const App = () => {
         <Route path="/verified/:token" element={<VerifPage />} />
         <Route path="/user/profile" element={<ProfileUser />} />
         <Route path="/invoice/:invoiceN" element={<Invoice />} />
-        <Route path="/check-out" element={<CheckOut/>} />
 
+        <Route element={<ProtectedRoutesUser/>}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/check-out" element={<CheckOut/>} />
+        </Route>
+      
         <Route
           path="/admin"
           element={username ? <Navigate to="/admin/home" /> : <AdminLogin />}

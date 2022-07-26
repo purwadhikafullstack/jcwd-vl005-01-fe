@@ -8,6 +8,8 @@ import { mobile } from "../../responsive";
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { useSelector } from "react-redux";
 
 
 
@@ -99,7 +101,9 @@ const Button = styled.button`
 
 const Product = () => {
   const [productData, setProductData] = useState([]);
+  const [qty, setQty] = useState(0);
   const params = useParams()
+  const userData = useSelector((state) => state.user.user_id)
 
   useEffect(() => {
     Axios.get(process.env.REACT_APP_API + `/products/${params.id}`)
@@ -111,6 +115,19 @@ const Product = () => {
         console.log(error);
       });
   }, []);
+
+  const addToCart = (product_id) => {
+    Axios.post(process.env.REACT_APP_API + '/cart/products', {user_id: userData, product_id: product_id, qty: qty})
+    .then((response) => {
+      alert("Succesfully Add Product To Cart");
+      setQty(0)
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(err);
+      setQty(0)
+    })
+  }
 
   return (
     <Container>
@@ -132,8 +149,29 @@ const Product = () => {
             <Price>{product.weight_gram} gram</Price>
           </ContainerP>
           <AddContainer>
-            <Price>Stock : {product.stock}</Price>
-            <Button>ADD TO CART</Button>
+            <AmountContainer>
+              <Price>Stock : {product.stock}</Price>
+              <IconButton onClick={() => {
+                if(qty==0) {
+                  alert("Quantity Cannot Be Less Than 0")
+                }
+                else{
+                  setQty(qty-1)
+                }
+              }}>
+                  <Remove/>
+              </IconButton>
+              <Amount>{qty}</Amount>
+              <IconButton onClick={() => {
+                if(qty >= product.stock){
+                  alert("Product Quantity Exceeds Product Stock")
+                }
+                else{
+                  setQty(qty+1)
+                }
+              }}><Add /></IconButton>
+            </AmountContainer>
+            <Button onClick={() => addToCart(product.id)}>ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>))}

@@ -96,8 +96,10 @@ const Navbar = () => {
   const [dbCartList, setDbCartList] = useState([]);
 
   useEffect(() => {
-    getCartList();
-  })
+    if(userData.user_id){
+      getCartList();
+    }
+  }, [])
 
   const getCartList = () => {
     Axios.get(process.env.REACT_APP_API+ `/cart/products/${userData.user_id}`)

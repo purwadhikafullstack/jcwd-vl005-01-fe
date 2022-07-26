@@ -361,7 +361,7 @@ class ProductList extends React.Component{
                       </Select>
                     </FormControl>
 
-                    <InputLabel id="category-select" required>Upload Image</InputLabel>
+                    <InputLabel id="upload-image" required>Upload Image</InputLabel>
                     <Box color='neutral' display='flex' flex-direction='row' justifyContent='center' alignItems='center' width='100%' height='100px' border='1px dotted #508dcd'>
                       <label htmlFor="productMenu">
                         <Input accept="image/*" id="productMenu" multiple type="file" onChange={(e) => this.setState({img_url: e.target.files[0]})}/>
