@@ -79,9 +79,9 @@ export default function TransactionHistory () {
             border={1} 
             display="flex" 
             padding={2}>
-                {invoice.length ? 
+            {invoice.length ? 
             <Box display="flex" flexDirection="column">
-                {invoice.map((invoice, index) => (
+              {invoice.map((invoice, index) => (
               <Accordion key={index}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
