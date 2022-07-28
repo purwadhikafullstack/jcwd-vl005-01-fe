@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
+  margin-bottom: 10px;
 `;
 
 const Form = styled.form`
@@ -34,7 +35,8 @@ const Button = styled.button`
   background-color: teal;
   color: white;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 `;
 
 export default function EditAddress () {
