@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import {
-  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField, Button
+  Box, Accordion, AccordionSummary, Typography, AccordionDetails, Input, TextField, Button, CircularProgress
 } from "@mui/material";
 import { toast } from "react-toastify";
 import Axios from "axios";
@@ -38,6 +38,7 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
+  margin-bottom: 10px;
 `;
 
 export default function TransactionHistory () {
@@ -55,21 +56,6 @@ export default function TransactionHistory () {
             console.log(error);
         });
     }, []);
-
-    // const click = () => {
-    //     Navigate(`/invoice/${tcode}`)
-    // }
-    // const getInvoicePdf = () => {
-
-    //   Axios.get(process.env.REACT_APP_API+'/invoice/test')
-    //     .then((res) => {
-    //         console.log("respond :", res.data)
-    //     })
-    //     .catch((error) => {
-    //         toast.error(error.response.data)
-    //         console.log(error)
-    //     })
-    // }
 
     return (
         <Wrapper>
@@ -93,9 +79,9 @@ export default function TransactionHistory () {
                   <Typography textTransform="capitalize" marginLeft={22}>Status : {invoice.status}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography marginBottom={2}> &bull; ({invoice.qty}) {invoice.name}</Typography>
                   {invoice.status === "Approved" ?  
-                  <Button onClick={()=>window.open(`/invoice/${invoice.tcode}`,'_blank')}>See Full Invoice <AdfScannerIcon/></Button> : null }
+                  <Button onClick={()=>window.open(`/invoice/${invoice.tcode}`,'_blank')}>See Full Invoice <AdfScannerIcon/></Button> : 
+                  <Typography color="red">Transaction Still in Process by Admin <CircularProgress size={10} color="error"/></Typography> }
                    {/* <Button onClick={click}>See Full Invoice <AdfScannerIcon/></Button> : null } */}
                 </AccordionDetails>
               </Accordion>

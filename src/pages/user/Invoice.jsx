@@ -12,11 +12,22 @@ export default function Invoice () {
     const params = useParams();
     const userData = useSelector((state) => state.user)
     const [invoiceData, setInvoiceData] = useState([]);
+    const [invoiceDetail, setInvoiceDetail] = useState([]);
 
     useEffect(() => {
         Axios.get(process.env.REACT_APP_API + `/printinvoice/${params.invoiceN}`)
         .then((res) => {
             setInvoiceData(() => res.data);
+            console.log(res);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }, []);
+    useEffect(() => {
+        Axios.get(process.env.REACT_APP_API + `/invoicedetail/${params.invoiceN}`)
+        .then((res) => {
+            setInvoiceDetail(() => res.data);
             console.log(res);
         })
         .catch((error) => {
@@ -67,21 +78,25 @@ export default function Invoice () {
                         <Typography fontSize="20px" align="right">Shipping Address : {invoice.address}, {invoice.city}, {invoice.province}, {invoice.postal}</Typography>
                     </Box>
                 </Box>
-                <Box flex={3} display="flex" padding={7}>
+                
+                <Box flex={3} display="flex" padding={3}>
                     <Box borderBottom={1}  flex={3}>
                         <Typography fontWeight="bold" fontSize="20px" >Item</Typography>
-                        <Typography borderTop={1} fontSize="20px" >{invoice.name}</Typography>
+                        {invoiceDetail.map((invodet) => (
+                        <Typography borderTop={1} fontSize="20px" >{invodet.name}</Typography>))}
                     </Box>
                     <Box borderBottom={1} flex={1}>
                         <Typography fontWeight="bold" fontSize="20px" align="right">Qty</Typography>
-                        <Typography borderTop={1} fontSize="20px" align="right">{invoice.qty}</Typography>
+                        {invoiceDetail.map((invodet) => (
+                        <Typography borderTop={1} fontSize="20px" align="right">{invodet.qty}</Typography>))}
                     </Box>
                     <Box borderBottom={1} flex={1}>
-                        <Typography fontWeight="bold" fontSize="20px" align="right">Price</Typography>
-                        <Typography borderTop={1} fontSize="20px" align="right">Rp {parseInt(invoice.price).toLocaleString('de')}</Typography>
+                        <Typography fontWeight="bold" fontSize="20px" align="right">Unit Price</Typography>
+                        {invoiceDetail.map((invodet) => (
+                        <Typography borderTop={1} fontSize="20px" align="right">Rp {parseInt(invodet.price).toLocaleString('de')}</Typography>))}
                     </Box>
                 </Box>
-                <Box flex={3} display="flex" padding={7}>
+                <Box flex={3} display="flex" padding={3}>
                     <Box flex={3}>
                         <Typography borderBottom={1} fontWeight="bold" fontSize="20px" align="left">Grand Total</Typography>
                     </Box>
