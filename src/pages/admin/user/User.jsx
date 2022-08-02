@@ -102,15 +102,15 @@ export default function User() {
                 <span className="userShowTitle">Contact Details</span>
                 <div className="userShowInfo">
                   <Home className="userShowIcon" />
-                  <span className="userShowInfoTitle">Address</span>
+                  <span className="userShowInfoTitle">{userObj.address}</span>
                 </div>
                 <div className="userShowInfo">
                   <LocationCity className="userShowIcon" />
-                  <span className="userShowInfoTitle">Province</span>
+                  <span className="userShowInfoTitle">{userObj.province}</span>
                 </div>
                 <div className="userShowInfo">
                   <Signpost className="userShowIcon" />
-                  <span className="userShowInfoTitle">Postal Code</span>
+                  <span className="userShowInfoTitle">{userObj.postal}</span>
                 </div>
               </Box>
             </Stack>
