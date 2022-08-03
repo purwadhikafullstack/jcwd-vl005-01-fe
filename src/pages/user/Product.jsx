@@ -8,7 +8,7 @@ import { mobile } from "../../responsive";
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 
 
@@ -87,23 +87,24 @@ const Amount = styled.span`
   margin: 0px 5px;
 `;
 
-const Button = styled.button`
-  padding: 15px;
-  border: 2px solid teal;
-  background-color: white;
-  cursor: pointer;
-  font-weight: 500;
+// const Button = styled.button`
+//   padding: 15px;
+//   border: 2px solid teal;
+//   background-color: white;
+//   cursor: pointer;
+//   font-weight: 500;
 
-  &:hover {
-    background-color: #f8f4f4;
-  }
-`;
+//   &:hover {
+//     background-color: #f8f4f4;
+//   }
+// `;
 
 const Product = () => {
   const [productData, setProductData] = useState([]);
   const [qty, setQty] = useState(0);
   const params = useParams()
   const userData = useSelector((state) => state.user.user_id)
+  const isVerified = useSelector((state) => state.user.status)
 
   useEffect(() => {
     Axios.get(process.env.REACT_APP_API + `/products/${params.id}`)
@@ -171,7 +172,18 @@ const Product = () => {
                 }
               }}><Add /></IconButton>
             </AmountContainer>
-            <Button onClick={() => addToCart(product.id)}>ADD TO CART</Button>
+            {isVerified == "active" ?
+            <Button onClick={() => {
+              if(productData.stock == null || productData.stock == 0){
+                alert("Product Out Of Stock")
+              }
+              else{
+                addToCart(productData.id, productData.qty)
+              }
+  
+            }} variant='contained'>ADD TO CART</Button>
+             :
+            <Button variant='contained' disabled>ADD TO CART</Button>}
           </AddContainer>
         </InfoContainer>
       </Wrapper>))}
