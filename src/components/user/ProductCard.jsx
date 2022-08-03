@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 export default function ProductCard({productData}) {
   const Navigate = useNavigate();
   const userData = useSelector((state) => state.user.user_id)
+  const isVerified = useSelector((state) => state.user.status)
 
   const clickProductCard = () => {
         Navigate(`/products/${productData.id}`)
@@ -48,7 +49,7 @@ export default function ProductCard({productData}) {
             </Typography>
             <Typography variant="h6" color="text.secondary">Stock : {productData.stock}</Typography>
           </Box>
-          { userData ? 
+          { isVerified == "active" ? 
             <Button onClick={() => {
               if(productData.stock == null || productData.stock == 0){
                 alert("Product Out Of Stock")
