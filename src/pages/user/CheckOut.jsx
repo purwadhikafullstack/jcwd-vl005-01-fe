@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import { green } from "@mui/material/colors";
+import NumberFormat from 'react-number-format'
 
 const Container = styled.div``;
 
@@ -665,7 +666,15 @@ class CheckOut extends React.Component{
                             <SummaryItem>
                                 <SummaryItemText>Subtotal</SummaryItemText>
                                 {calculateSubTotal()}
-                                <SummaryItemPrice>Rp {subTotal}</SummaryItemPrice>
+                                <SummaryItemPrice>
+                                <NumberFormat
+                                    value={subTotal}
+                                    thousandSeparator={'.'} 
+                                    decimalSeparator={','}
+                                    prefix={'Rp '}
+                                    displayType={'text'}
+                                ></NumberFormat>
+                                </SummaryItemPrice>
                             </SummaryItem>
                             <SummaryItem>
                                 <SummaryItemText>Delivery</SummaryItemText>
@@ -674,17 +683,39 @@ class CheckOut extends React.Component{
                                     this.state.deliveryFee == 0 ?
                                     "NOT YET CALCULATED"
                                     :
-                                    "Rp " + this.state.deliveryFee
+                                    <NumberFormat
+                                        value={this.state.deliveryFee}
+                                        thousandSeparator={'.'} 
+                                        decimalSeparator={','}
+                                        prefix={'Rp '}
+                                        displayType={'text'}
+                                    ></NumberFormat>
                                   }
                                 </SummaryItemPrice>
                             </SummaryItem>
                             <SummaryItem>
                                 <SummaryItemText>Tax</SummaryItemText>
-                                <SummaryItemPrice>Rp {subTotal*5/100}</SummaryItemPrice>
+                                <SummaryItemPrice>
+                                    <NumberFormat
+                                    value={subTotal*5/100}
+                                    thousandSeparator={'.'} 
+                                    decimalSeparator={','}
+                                    prefix={'Rp '}
+                                    displayType={'text'}
+                                    ></NumberFormat>
+                                </SummaryItemPrice>
                             </SummaryItem>
                             <SummaryItem type="total">
                                 <SummaryItemText>Total</SummaryItemText>
-                                <SummaryItemPrice>Rp {subTotal+=subTotal*5/100+this.state.deliveryFee}</SummaryItemPrice>
+                                <SummaryItemPrice>
+                                    <NumberFormat
+                                        value={subTotal+=subTotal*5/100+this.state.deliveryFee}
+                                        thousandSeparator={'.'} 
+                                        decimalSeparator={','}
+                                        prefix={'Rp '}
+                                        displayType={'text'}
+                                    ></NumberFormat>
+                                </SummaryItemPrice>
                             </SummaryItem>
                             <CustomButton onClick={() => this.onSubmitTransaction(subTotal)}><StyledLink to='/check-out'>COMPLETE PURCHASE</StyledLink></CustomButton>
                             <Hr/>

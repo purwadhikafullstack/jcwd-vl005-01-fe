@@ -10,6 +10,7 @@ import Confirmation from "../../components/admin/alert/Confirmation";
 import {  connect, useSelector } from "react-redux"
 import { FormControl, MenuItem, Select } from "@mui/material";
 import { Link } from "react-router-dom";
+import NumberFormat from 'react-number-format'
 
 
 const Container = styled.div``;
@@ -249,7 +250,15 @@ class Cart extends React.Component{
               <SummaryItem>
                 <SummaryItemText>Subtotal</SummaryItemText>
                 {calculateSubTotal()}
-                <SummaryItemPrice>Rp {subTotal}</SummaryItemPrice>
+                <SummaryItemPrice>
+                  <NumberFormat
+                      value={subTotal}
+                      thousandSeparator={'.'} 
+                      decimalSeparator={','}
+                      prefix={'Rp '}
+                      displayType={'text'}
+                    ></NumberFormat>
+                </SummaryItemPrice>
               </SummaryItem>
               <SummaryItem>
                 <SummaryItemText>Delivery</SummaryItemText>
@@ -257,11 +266,27 @@ class Cart extends React.Component{
               </SummaryItem>
               <SummaryItem>
                 <SummaryItemText>Tax</SummaryItemText>
-                <SummaryItemPrice>Rp {subTotal*5/100}</SummaryItemPrice>
+                <SummaryItemPrice>
+                  <NumberFormat
+                    value={subTotal*5/100}
+                    thousandSeparator={'.'} 
+                    decimalSeparator={','}
+                    prefix={'Rp '}
+                    displayType={'text'}
+                  ></NumberFormat>
+                </SummaryItemPrice>
               </SummaryItem>
               <SummaryItem type="total">
                 <SummaryItemText>Total</SummaryItemText>
-                <SummaryItemPrice>Rp {subTotal+=subTotal*5/100}</SummaryItemPrice>
+                <SummaryItemPrice>
+                  <NumberFormat
+                      value={subTotal+=subTotal*5/100}
+                      thousandSeparator={'.'} 
+                      decimalSeparator={','}
+                      prefix={'Rp '}
+                      displayType={'text'}
+                    ></NumberFormat>
+                </SummaryItemPrice>
               </SummaryItem>
               <Button><StyledLink to='/check-out'>CHECKOUT NOW</StyledLink></Button>
             </Summary>
